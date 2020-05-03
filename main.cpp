@@ -6,15 +6,27 @@
 
 #include <iostream>
 
-class compare{
-public:
-    int operator()(int x, int y) {
 
-        return y-x;
+
+class Print{
+public:
+    void operator()(int &k, treeNode<int,int>* node) {
+
+        cout<<node->get_data()<<",\n";
+        k--;
 
     }
 };
+class print_song_tree{
+public:
+    void operator()(int &k, treeNode<int,int>* song_tree) {
+        Print p;
 
+        //song_tree->get_data()->printKmax(k,p); TODO: this like should work
+        //                                       TODO: when data is tree pointer
+
+    }
+};
 void print_in_order(treeNode<int,int>* t)
 {
     if (t== nullptr)
@@ -75,22 +87,23 @@ int main() {
     t1.add_treeNode(15,15);
     t1.add_treeNode(1,1);
 
+ //   t1.removeByKey(1);
+ //   t1.removeByKey(2);
+ //   t1.removeByKey(22);
+t1.removeByKey(8);
+t1.removeByKey(10);
+    //Print p2;
 
+  //  print_song_tree p1;
 
+   // int m=5;
 
+ //   t1.printKmax(m,p2);
 
+    printf("\n-------------\n");
 
-
-
-
-
-
-
-   // std::cout << "Hello, World!" << std::endl;
 
     print_in_order(t1.getRoot());
-
-    //cout<<"\n"<<t1.getLargest()->get_data();
 
 
     return 0;

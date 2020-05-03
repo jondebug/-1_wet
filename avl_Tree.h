@@ -44,9 +44,21 @@ public:
     void set_height(int HEIGHT){
         this->height=HEIGHT;
     }
+    void swapNodes(treeNode* to_swap) {
+        treeNode temp(*to_swap);
+
+        to_swap->data=data;
+        to_swap->key=key;
+
+        data=temp.data;
+        key=temp.key;
+
+    }
 
 
     treeNode* get_left(){
+ //       if (this== nullptr)
+//            return nullptr;
         return left_son;
     }
 
@@ -113,6 +125,9 @@ public:
 
     void repairBF(treeNode<T,S> *new_node) {
         treeNode<T, S> *current = new_node->get_father();
+        new_node->set_height(std::max(get_height_addition(new_node->get_left()),
+                                     get_height_addition(new_node->get_right()))
+                                     +1);
         int bf;
 
         while (current!= nullptr) {
@@ -262,19 +277,19 @@ public:
 
     }
 
-    int printKmax(int k){
+    template<typename P>
+    int printKmax(int &k, P p){
         int counter = 0;
         treeNode<T, S> *curr=largestNode;
         treeNode<T, S> *last = nullptr;
 
-        while ((counter < k)&&(curr!= nullptr)) {
+        while (k>0&&(curr!= nullptr)) {
             if (curr->get_right() == last) { //we finished with right sub tree
-                std::cout << curr->get_data(); //print root of subtree
-                std::cout << ",";
+                p(k,curr);
                 counter++;
 
                 if (curr->get_left()!= nullptr) { //we finished with right sub tree -> go to left sub tree
-                    curr = findRightest(curr->get_left());
+                    curr = findRightMost(curr->get_left());
                     last=curr->get_right();
                 }
                 else { //we finished with both left and right sub tree, and there is no left sub tree
@@ -293,10 +308,16 @@ public:
 
 
 
-    treeNode<T,S>* findRightest(treeNode<T,S>* node){
+    treeNode<T,S>* findRightMost(treeNode<T,S>* node){
         //treeNode<T, S> *rightest = root->get_left();
         while(node->get_right()!= nullptr)
             node=node->get_right();
+        return node;
+    }
+    treeNode<T,S>* findLeftMost(treeNode<T,S>* node){
+        //treeNode<T, S> *rightest = root->get_left();
+        while(node->get_left()!= nullptr)
+            node=node->get_left();
         return node;
     }
 
@@ -334,6 +355,147 @@ public:
     treeNode<T,S>* getLargest(){
         return largestNode;
     }
+    void removeRoot(int key) {
+
+        if ((root->get_right() == nullptr) && root->get_left() == nullptr) {
+            delete[] this;//TODO is this ok?
+            return;
+        }
+        if (root->get_right() == nullptr) {
+            root = root->get_left();
+            delete root->get_father();
+            root->set_father(nullptr);
+
+            return;
+        }
+        if (root->get_left() == nullptr) {
+            root = root->get_right();
+            delete root->get_father();
+            root->set_father(nullptr);
+
+            return;
+        }
+
+        treeNode<T,S>* NextLargest=findLeftMost(root->get_right());
+        root->swapNodes(NextLargest);
+
+        bool right_son=(root->get_right() == NextLargest);
+
+        if((NextLargest->get_left()!= nullptr)||(NextLargest->get_left()!=
+                                                  nullptr)) {
+
+
+            removeOneSonNode(NextLargest, right_son,
+                             NextLargest->get_father());
+            return;
+        }
+
+        if(right_son)
+            root->set_right(nullptr);
+        else
+            NextLargest->get_father()->set_left(nullptr);
+        delete NextLargest;
+
+
+
+
+    }
+
+    void removeOneSonNode(treeNode<T,S>* NodeToRemove, bool rightSon,
+            treeNode<T,S>* Father ){
+
+        if(NodeToRemove->get_right()== nullptr) {//Node to remove only has
+            // left son, move the left son up to where node was
+            if (rightSon) {//Node is a right son
+                Father->set_right(NodeToRemove->get_left());
+                NodeToRemove->get_left()->set_father(Father);
+                delete[] NodeToRemove;
+                repairBF(Father->get_right());
+            } else {//Node is a left son
+                Father->set_left(NodeToRemove->get_left());
+
+                NodeToRemove->get_left()->set_father(Father);
+                delete[] NodeToRemove;
+                repairBF(Father->get_left());
+            }
+            return;
+
+        }
+        else if(NodeToRemove->get_left()== nullptr){//Node to remove only has
+            // right son, move the left son up to where node was
+            if (rightSon) {//Node is a right son
+                Father->set_right(NodeToRemove->get_right());
+                NodeToRemove->get_right()->set_father(Father);
+                delete[] NodeToRemove;
+                repairBF(Father->get_right());
+            } else {//Node is a left son
+                Father->set_left(NodeToRemove->get_right());
+                NodeToRemove->get_right()->set_father(Father);
+                delete[] NodeToRemove;
+                repairBF(Father->get_left());
+            }
+
+            return;
+        }
+
+    }
+
+    void removeByKey (S key){
+
+        treeNode<T,S>* NodeToRemove=this->searchKey(key, root);
+        bool rightSon= false;
+
+
+        if(NodeToRemove==this->root){
+            this->removeRoot(key);
+            repairBF(root);
+            return;
+        }
+        treeNode<T,S>* Father=NodeToRemove->get_father();
+        if(Father->get_right()==NodeToRemove){ //
+                                                // Node to remove is a right son
+            rightSon=true;
+        }
+
+        if((NodeToRemove->get_left()== nullptr)&&(NodeToRemove->get_left()==
+        nullptr))// Node to remove is a leaf
+
+        {
+            if(rightSon){
+                Father->set_right(nullptr);
+            }
+            else{
+                Father->set_left(nullptr);
+            }
+
+            delete NodeToRemove;
+            repairBF(Father);
+            return;
+
+        }
+
+        if((NodeToRemove->get_left()!= nullptr)||(NodeToRemove->get_left()!=
+                                                  nullptr)){
+
+            removeOneSonNode(NodeToRemove, rightSon, Father);
+
+            return;
+        }
+        //Node to remove has two children
+        //find the next largest:
+        treeNode<T,S>* NextLargest=findLeftMost(NodeToRemove->get_right());
+        NodeToRemove->swapNodes(NextLargest);
+
+        removeOneSonNode(NextLargest, NodeToRemove->get_right() == NextLargest,
+                         NextLargest->get_father());
+
+
+
+
+        }
+
+
+
 
 };
 #endif //INC_1_WET_NEW_AVL_TREE_H
