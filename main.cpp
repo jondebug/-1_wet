@@ -88,17 +88,21 @@ int main() {
     t1.add_treeNode(1,1);
 
  //   t1.removeByKey(1);
- //   t1.removeByKey(2);
+    t1.removeByKey(2);
  //   t1.removeByKey(22);
 t1.removeByKey(8);
-t1.removeByKey(10);
-    //Print p2;
+//t1.removeByKey(10);
+t1.removeByKey(15);
+t1.removeByKey(18);
+t1.removeByKey(22);
+t1.removeByKey(11);
+    Print p2;
 
   //  print_song_tree p1;
 
-   // int m=5;
+    int m=5;
 
- //   t1.printKmax(m,p2);
+    t1.printKmax(m,p2);
 
     printf("\n-------------\n");
 

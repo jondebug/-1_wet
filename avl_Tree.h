@@ -381,7 +381,7 @@ public:
 
         bool right_son=(root->get_right() == NextLargest);
 
-        if((NextLargest->get_left()!= nullptr)||(NextLargest->get_left()!=
+        if((NextLargest->get_left()!= nullptr)||(NextLargest->get_right()!=
                                                   nullptr)) {
 
 
@@ -449,6 +449,7 @@ public:
         if(NodeToRemove==this->root){
             this->removeRoot(key);
             repairBF(root);
+            largestNode=findRightMost(root);
             return;
         }
         treeNode<T,S>* Father=NodeToRemove->get_father();
@@ -456,9 +457,9 @@ public:
                                                 // Node to remove is a right son
             rightSon=true;
         }
-
-        if((NodeToRemove->get_left()== nullptr)&&(NodeToRemove->get_left()==
-        nullptr))// Node to remove is a leaf
+        // Node to remove is a leaf
+        if((NodeToRemove->get_left()==nullptr)&&(NodeToRemove->get_right()
+        ==nullptr))
 
         {
             if(rightSon){
@@ -470,15 +471,16 @@ public:
 
             delete NodeToRemove;
             repairBF(Father);
+            largestNode=findRightMost(root);
             return;
 
         }
-
-        if((NodeToRemove->get_left()!= nullptr)||(NodeToRemove->get_left()!=
+        //Node has one son
+        if((NodeToRemove->get_left()!= nullptr)||(NodeToRemove->get_right()!=
                                                   nullptr)){
 
             removeOneSonNode(NodeToRemove, rightSon, Father);
-
+            largestNode=findRightMost(root);
             return;
         }
         //Node to remove has two children
@@ -488,6 +490,7 @@ public:
 
         removeOneSonNode(NextLargest, NodeToRemove->get_right() == NextLargest,
                          NextLargest->get_father());
+        largestNode=findRightMost(root);
 
 
 
