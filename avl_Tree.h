@@ -124,10 +124,9 @@ public:
     }
 
     void repairBF(treeNode<T,S> *new_node) {
-        treeNode<T, S> *current = new_node->get_father();
-        new_node->set_height(std::max(get_height_addition(new_node->get_left()),
-                                     get_height_addition(new_node->get_right()))
-                                     +1);
+        treeNode<T, S> *current = new_node;
+        //new_node->set_height(std::max(get_height_addition(new_node->get_left
+        //()),get_height_addition(new_node->get_right())) +1);
         int bf;
 
         while (current!= nullptr) {
@@ -148,7 +147,7 @@ public:
             if (bf == -2) {
                 if (get_balanceFactor(current->get_right()) > 0) {
                     rightRotation(current->get_right());
-                    leftRotation(current->get_left());
+                    leftRotation(current);
                 } else
                     leftRotation(current);
             }
@@ -243,6 +242,40 @@ public:
         recurtionDestroy(root);
     }
 
+    void treeClear(){
+        recurtionDestroy(root);
+        root= nullptr;
+
+    }
+    void leftRotation(treeNode<T,S>* node){
+        treeNode<T,S>* right=node->get_right();
+        treeNode<T,S>* rightLeft=right->get_left();
+
+        right->set_left(node);
+        node->set_right(rightLeft);
+        if(rightLeft!= nullptr){
+            rightLeft->set_father(node);
+        }
+
+
+        right->set_father(node->get_father());
+        if(node->get_father()!=nullptr){
+            if(node->get_father()->get_left()==node){
+                (node->get_father())->set_left(right);
+            }
+            else
+                (node->get_father())->set_right(right);
+        }
+        else{
+            this->root=right;
+        }
+        node->set_father(right);
+
+        node->set_height(std::max(get_height_addition(node->get_left()),get_height_addition(node->get_right()))+1);
+        right->set_height(std::max(get_height_addition(right->get_left()),get_height_addition(right->get_right()))+1);
+    }
+
+
     void rightRotation(treeNode<T,S>* node){
         treeNode<T,S>* left=node->get_left();
         treeNode<T,S>* leftRight=left->get_right();
@@ -321,33 +354,6 @@ public:
         return node;
     }
 
-    void leftRotation(treeNode<T,S>* node){
-        treeNode<T,S>* right=node->get_right();
-        treeNode<T,S>* rightLeft=right->get_left();
-
-        right->set_left(node);
-        node->set_right(rightLeft);
-        if(rightLeft!= nullptr){
-            rightLeft->set_father(node);
-        }
-
-
-        right->set_father(node->get_father());
-        if(node->get_father()!=nullptr){
-            if(node->get_father()->get_left()==node){
-                (node->get_father())->set_left(right);
-            }
-            else
-                (node->get_father())->set_right(right);
-        }
-        else{
-            this->root=right;
-        }
-        node->set_father(right);
-
-        node->set_height(std::max(get_height_addition(node->get_left()),get_height_addition(node->get_right()))+1);
-        right->set_height(std::max(get_height_addition(right->get_left()),get_height_addition(right->get_right()))+1);
-    }
 
     treeNode<T,S>* getRoot(){
         return root;
@@ -476,7 +482,7 @@ public:
 
         }
         //Node has one son
-        if((NodeToRemove->get_left()!= nullptr)||(NodeToRemove->get_right()!=
+        if((NodeToRemove->get_left()== nullptr)||(NodeToRemove->get_right()==
                                                   nullptr)){
 
             removeOneSonNode(NodeToRemove, rightSon, Father);
@@ -496,6 +502,29 @@ public:
 
 
         }
+
+        void print_in_order(treeNode<int,int>* t)
+        {
+        if (t== nullptr)
+            return;
+        print_in_order(t->get_left());
+        int bf=get_height_addition(t->get_left())-get_height_addition
+                (t->get_right());
+
+        cout<<t->get_data()<<"  bf:  "<<bf<<"  height:  "<<t->get_height()
+        <<"\n";
+        print_in_order(t->get_right());
+
+    }
+
+    void printTree()
+    {
+        if (root== nullptr)
+            return;
+        print_in_order(root);
+        cout<<"-----------------\n";
+
+    }
 
 
 
