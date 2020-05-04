@@ -2,6 +2,9 @@
 // Created by jonathan_pc on 4/30/2020.
 //
 
+
+
+
 #ifndef INC_1_WET_NEW_AVL_TREE_H
 #define INC_1_WET_NEW_AVL_TREE_H
 #include <iostream>
@@ -41,9 +44,21 @@ public:
     void set_height(int HEIGHT){
         this->height=HEIGHT;
     }
+    void swapNodes(treeNode* to_swap) {
+        treeNode temp(*to_swap);
+
+        to_swap->data=data;
+        to_swap->key=key;
+
+        data=temp.data;
+        key=temp.key;
+
+    }
 
 
     treeNode* get_left(){
+ //       if (this== nullptr)
+//            return nullptr;
         return left_son;
     }
 
@@ -104,17 +119,19 @@ public:
     }
     int get_balanceFactor(treeNode<T,S> *node){
         return get_height_addition(node->get_left())- get_height_addition
-                                                                  (node->get_right());
+                (node->get_right());
 
     }
 
     void repairBF(treeNode<T,S> *new_node) {
-        treeNode<T, S> *current = new_node->get_father();
+        treeNode<T, S> *current = new_node;
+        //new_node->set_height(std::max(get_height_addition(new_node->get_left
+        //()),get_height_addition(new_node->get_right())) +1);
         int bf;
 
         while (current!= nullptr) {
             bf = get_height_addition(current->get_left()) -
-                    get_height_addition(current->get_right());
+                 get_height_addition(current->get_right());
 
             current->set_height(std::max(get_height_addition(current->get_left()),
                                          get_height_addition(current->get_right()))+1);
@@ -130,7 +147,7 @@ public:
             if (bf == -2) {
                 if (get_balanceFactor(current->get_right()) > 0) {
                     rightRotation(current->get_right());
-                    leftRotation(current->get_left());
+                    leftRotation(current);
                 } else
                     leftRotation(current);
             }
@@ -140,7 +157,15 @@ public:
         }
     }
 
-    treeNode<T,S>* searchKey(S key,treeNode<T,S> *node){
+    treeNode<T,S>* recursionDelete(S key,treeNode<T,S> *node) {
+        if (root==NULL)
+            return root;
+
+
+    }
+
+
+        treeNode<T,S>* searchKey(S key,treeNode<T,S> *node){
         if (node==nullptr)
             return NULL;
         if(key==node->get_key())
@@ -152,7 +177,7 @@ public:
     }
 
 
-   void recurtionAdd(treeNode<T,S> *root, T to_add, S key)
+    void recurtionAdd(treeNode<T,S> *root, T to_add, S key)
     {
         if (root->get_key()==key) {// new node already exists
             return ;
@@ -167,7 +192,7 @@ public:
 
                 root->set_right(new_node);
 
-                repairBF(new_node); //TO-BE-WRITTEN
+                repairBF(new_node);
 
                 return;
 
@@ -217,6 +242,40 @@ public:
         recurtionDestroy(root);
     }
 
+    void treeClear(){
+        recurtionDestroy(root);
+        root= nullptr;
+
+    }
+    void leftRotation(treeNode<T,S>* node){
+        treeNode<T,S>* right=node->get_right();
+        treeNode<T,S>* rightLeft=right->get_left();
+
+        right->set_left(node);
+        node->set_right(rightLeft);
+        if(rightLeft!= nullptr){
+            rightLeft->set_father(node);
+        }
+
+
+        right->set_father(node->get_father());
+        if(node->get_father()!=nullptr){
+            if(node->get_father()->get_left()==node){
+                (node->get_father())->set_left(right);
+            }
+            else
+                (node->get_father())->set_right(right);
+        }
+        else{
+            this->root=right;
+        }
+        node->set_father(right);
+
+        node->set_height(std::max(get_height_addition(node->get_left()),get_height_addition(node->get_right()))+1);
+        right->set_height(std::max(get_height_addition(right->get_left()),get_height_addition(right->get_right()))+1);
+    }
+
+
     void rightRotation(treeNode<T,S>* node){
         treeNode<T,S>* left=node->get_left();
         treeNode<T,S>* leftRight=left->get_right();
@@ -242,40 +301,59 @@ public:
         node->set_father(left);
 
         node->set_height(std::max(get_height_addition(node->get_left()),
-                get_height_addition(node->get_right()))+1);
+                                  get_height_addition(node->get_right()))+1);
         left->set_height(std::max(get_height_addition(left->get_left()),get_height_addition(left->get_right()))+1);
     }
 
-    void leftRotation(treeNode<T,S>* node){
-        treeNode<T,S>* right=node->get_right();
-        treeNode<T,S>* rightLeft=right->get_left();
-
-        right->set_left(node);
+    treeNode<T,S>* findNext(treeNode<T,S>* node){
 
 
-
-        node->set_right(rightLeft);
-        if(rightLeft!= nullptr){
-            rightLeft->set_father(node);
-        }
-
-
-        right->set_father(node->get_father());
-        if(node->get_father()!=nullptr){
-            if(node->get_father()->get_left()==node){
-                (node->get_father())->set_left(right);
-            }
-            else
-                (node->get_father())->set_right(right);
-        }
-        else{
-            this->root=right;
-        }
-        node->set_father(right);
-
-        node->set_height(std::max(get_height_addition(node->get_left()),get_height_addition(node->get_right()))+1);
-        right->set_height(std::max(get_height_addition(right->get_left()),get_height_addition(right->get_right()))+1);
     }
+
+    template<typename P>
+    int printKmax(int &k, P p){
+        int counter = 0;
+        treeNode<T, S> *curr=largestNode;
+        treeNode<T, S> *last = nullptr;
+
+        while (k>0&&(curr!= nullptr)) {
+            if (curr->get_right() == last) { //we finished with right sub tree
+                p(k,curr);
+                counter++;
+
+                if (curr->get_left()!= nullptr) { //we finished with right sub tree -> go to left sub tree
+                    curr = findRightMost(curr->get_left());
+                    last=curr->get_right();
+                }
+                else { //we finished with both left and right sub tree, and there is no left sub tree
+                    last = curr;
+                    curr = curr->get_father();
+                }
+
+            } else if (last->get_father() == curr) { //finished with both left and right sub trees
+                last = curr;
+                curr = last->get_father();
+            }
+        }
+        return counter;
+    }
+
+
+
+
+    treeNode<T,S>* findRightMost(treeNode<T,S>* node){
+        //treeNode<T, S> *rightest = root->get_left();
+        while(node->get_right()!= nullptr)
+            node=node->get_right();
+        return node;
+    }
+    treeNode<T,S>* findLeftMost(treeNode<T,S>* node){
+        //treeNode<T, S> *rightest = root->get_left();
+        while(node->get_left()!= nullptr)
+            node=node->get_left();
+        return node;
+    }
+
 
     treeNode<T,S>* getRoot(){
         return root;
@@ -283,6 +361,173 @@ public:
     treeNode<T,S>* getLargest(){
         return largestNode;
     }
+    void removeRoot(int key) {
+
+        if ((root->get_right() == nullptr) && root->get_left() == nullptr) {
+            delete[] this;//TODO is this ok?
+            return;
+        }
+        if (root->get_right() == nullptr) {
+            root = root->get_left();
+            delete root->get_father();
+            root->set_father(nullptr);
+
+            return;
+        }
+        if (root->get_left() == nullptr) {
+            root = root->get_right();
+            delete root->get_father();
+            root->set_father(nullptr);
+
+            return;
+        }
+
+        treeNode<T,S>* NextLargest=findLeftMost(root->get_right());
+        root->swapNodes(NextLargest);
+
+        bool right_son=(root->get_right() == NextLargest);
+
+        if((NextLargest->get_left()!= nullptr)||(NextLargest->get_right()!=
+                                                  nullptr)) {
+
+
+            removeOneSonNode(NextLargest, right_son,
+                             NextLargest->get_father());
+            return;
+        }
+
+        if(right_son)
+            root->set_right(nullptr);
+        else
+            NextLargest->get_father()->set_left(nullptr);
+        delete NextLargest;
+
+
+
+
+    }
+
+    void removeOneSonNode(treeNode<T,S>* NodeToRemove, bool rightSon,
+            treeNode<T,S>* Father ){
+
+        if(NodeToRemove->get_right()== nullptr) {//Node to remove only has
+            // left son, move the left son up to where node was
+            if (rightSon) {//Node is a right son
+                Father->set_right(NodeToRemove->get_left());
+                NodeToRemove->get_left()->set_father(Father);
+                delete[] NodeToRemove;
+                repairBF(Father->get_right());
+            } else {//Node is a left son
+                Father->set_left(NodeToRemove->get_left());
+
+                NodeToRemove->get_left()->set_father(Father);
+                delete[] NodeToRemove;
+                repairBF(Father->get_left());
+            }
+            return;
+
+        }
+        else if(NodeToRemove->get_left()== nullptr){//Node to remove only has
+            // right son, move the left son up to where node was
+            if (rightSon) {//Node is a right son
+                Father->set_right(NodeToRemove->get_right());
+                NodeToRemove->get_right()->set_father(Father);
+                delete[] NodeToRemove;
+                repairBF(Father->get_right());
+            } else {//Node is a left son
+                Father->set_left(NodeToRemove->get_right());
+                NodeToRemove->get_right()->set_father(Father);
+                delete[] NodeToRemove;
+                repairBF(Father->get_left());
+            }
+
+            return;
+        }
+
+    }
+
+    void removeByKey (S key){
+
+        treeNode<T,S>* NodeToRemove=this->searchKey(key, root);
+        bool rightSon= false;
+
+
+        if(NodeToRemove==this->root){
+            this->removeRoot(key);
+            repairBF(root);
+            largestNode=findRightMost(root);
+            return;
+        }
+        treeNode<T,S>* Father=NodeToRemove->get_father();
+        if(Father->get_right()==NodeToRemove){ //
+                                                // Node to remove is a right son
+            rightSon=true;
+        }
+        // Node to remove is a leaf
+        if((NodeToRemove->get_left()==nullptr)&&(NodeToRemove->get_right()
+        ==nullptr))
+
+        {
+            if(rightSon){
+                Father->set_right(nullptr);
+            }
+            else{
+                Father->set_left(nullptr);
+            }
+
+            delete NodeToRemove;
+            repairBF(Father);
+            largestNode=findRightMost(root);
+            return;
+
+        }
+        //Node has one son
+        if((NodeToRemove->get_left()== nullptr)||(NodeToRemove->get_right()==
+                                                  nullptr)){
+
+            removeOneSonNode(NodeToRemove, rightSon, Father);
+            largestNode=findRightMost(root);
+            return;
+        }
+        //Node to remove has two children
+        //find the next largest:
+        treeNode<T,S>* NextLargest=findLeftMost(NodeToRemove->get_right());
+        NodeToRemove->swapNodes(NextLargest);
+
+        removeOneSonNode(NextLargest, NodeToRemove->get_right() == NextLargest,
+                         NextLargest->get_father());
+        largestNode=findRightMost(root);
+
+
+
+
+        }
+
+        void print_in_order(treeNode<int,int>* t)
+        {
+        if (t== nullptr)
+            return;
+        print_in_order(t->get_left());
+        int bf=get_height_addition(t->get_left())-get_height_addition
+                (t->get_right());
+
+        cout<<t->get_data()<<"  bf:  "<<bf<<"  height:  "<<t->get_height()
+        <<"\n";
+        print_in_order(t->get_right());
+
+    }
+
+    void printTree()
+    {
+        if (root== nullptr)
+            return;
+        print_in_order(root);
+        cout<<"-----------------\n";
+
+    }
+
+
+
 
 };
 #endif //INC_1_WET_NEW_AVL_TREE_H
