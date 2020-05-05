@@ -59,9 +59,9 @@ public:
         this->next=node->next;
         this->prev=node->prev;
         this->data=node->data;
- }
+    }
 
- };
+};
 //---------------------------------------------
 
 template<typename T>
@@ -157,7 +157,7 @@ public:
 
     }
 
-    virtual ~ double_sided_list<T> (){
+    virtual ~double_sided_list<T> (){
         listNode<T> *it = this->first;
         listNode<T> *temp = this->first;
         while(it!=nullptr){

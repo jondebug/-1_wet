@@ -53,6 +53,37 @@ void print_in_order(treeNode<int,int>* t)
 int main(){
     avl_Tree<int, int> tree;
 
+    tree.add_treeNode(8,8);
+    tree.add_treeNode(3,3);
+    tree.add_treeNode(4,4);
+    tree.add_treeNode(9,9);
+    tree.add_treeNode(10,10);
+    tree.add_treeNode(5,5);
+    tree.add_treeNode(7,7);
+    tree.add_treeNode(1,1);
+    tree.add_treeNode(2,2);
+    tree.add_treeNode(6,6);
+
+
+
+
+
+    tree.removeByKey(10);
+    tree.removeByKey(1);
+
+    tree.removeByKey(2);
+    tree.removeByKey(3);
+    tree.removeByKey(5);
+    tree.removeByKey(7);
+    tree.removeByKey(8);
+    tree.removeByKey(9);
+    tree.removeByKey(4);
+    tree.removeByKey(6);
+
+    tree.printTree();
+
+
+
     //Specific Cases
 
     /*correct output for the four next cases
@@ -212,7 +243,7 @@ int main(){
     tree.add_treeNode(5,5);
     tree.add_treeNode(1,1);
     tree.removeByKey(3);
-    cout<<"check here!!!!!!!!!!!!!!!!!!!!!\n";
+
     tree.printTree();
     tree.treeClear();
 
@@ -451,8 +482,12 @@ int main(){
     tree.add_treeNode(2,2);
     tree.add_treeNode(4,4);
     tree.removeByKey(5);
+
+    cout<<"check here!!!!!!!!!!!!!!!!!!!!!\n";
+
     tree.printTree();
     tree.treeClear();
+
 
     //delete node cause LR
     /*correct output
@@ -466,12 +501,14 @@ int main(){
     tree.removeByKey(5);
     tree.printTree();
     tree.treeClear();
+    //tree.recurtionDestroy(tree.getRoot());
 
     std::vector<int> vector;
-    for (int i=1; i<=100; i++) vector.push_back(i);
-    return 0;
+    for (int i=1; i<=20; i++) vector.push_back(i);
+    //return 0;
     //Randomly insert and removes nodes
-    for (int k = 0; k < 20; ++k) {
+    for (int k = 0; k < 30; ++k) {
+        avl_Tree<int, int> tree;
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
         shuffle (vector.begin(), vector.end(), std::default_random_engine(seed));
         for (std::vector<int>::iterator it = vector.begin() ; it != vector.end(); ++it){
@@ -480,12 +517,18 @@ int main(){
         }
         tree.printTree();
         shuffle (vector.begin(), vector.end(), std::default_random_engine(seed));
+        int counter=0;
         for (std::vector<int>::iterator it = vector.begin() ; it != vector.end(); ++it){
+            counter++;
+            if (counter==99){
+
+            }
+            printf("no\n\n\n");
             tree.removeByKey(*it);
             tree.printTree();
 
         }
-        tree.treeClear();
+
         tree.printTree();
         std::cout << '\n';
     }
