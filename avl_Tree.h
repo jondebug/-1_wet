@@ -437,7 +437,7 @@ public:
             if (rightSon) {//Node is a right son
                 Father->set_right(NodeToRemove->get_left());
                 NodeToRemove->get_left()->set_father(Father);
-                delete[] NodeToRemove;
+                delete NodeToRemove;
                 NodeToRemove= nullptr;
                 Father->set_height(std::max(get_height_addition(Father->get_left
                         ()),get_height_addition(Father->get_right()))+1);
@@ -448,7 +448,7 @@ public:
                 Father->set_left(NodeToRemove->get_left());
 
                 NodeToRemove->get_left()->set_father(Father);
-                delete[] NodeToRemove;
+                delete NodeToRemove;
                 NodeToRemove= nullptr;
                 Father->set_height(std::max(get_height_addition(Father->get_left
                         ()),get_height_addition(Father->get_right()))+1);
@@ -472,7 +472,7 @@ public:
             } else {//Node is a left son
                 Father->set_left(NodeToRemove->get_right());
                 NodeToRemove->get_right()->set_father(Father);
-                delete[] NodeToRemove;
+                delete NodeToRemove;
                 NodeToRemove= nullptr;
                 Father->set_height(std::max(get_height_addition(Father->get_left
                         ()),get_height_addition(Father->get_right()))+1);
