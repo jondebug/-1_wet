@@ -15,11 +15,23 @@ class listNode {
     listNode *prev;
 
     T data;
+
+    int key;
 public:
+
 //
 //    listNode(T data, listNode *prev = nullptr, listNode *next = nullptr) :
 //            data(data), next(next), prev(prev) {
-//    }
+    //    }
+    void set_key(int key){
+        this->key=key;
+    }
+
+
+    int get_key(){
+        return key;
+    }
+
     void set_data(T data){
         this->data=data;
     }
@@ -68,6 +80,8 @@ template<typename T>
 
 class double_sided_list {
 
+
+
     listNode<T>* first;
 
     listNode<T>* last;
@@ -78,12 +92,13 @@ class double_sided_list {
 
 public:
 
+
     double_sided_list():length(0), first(nullptr), last(nullptr), iterator(
             nullptr){};
 
 
 
-    void addNode(T node_data){
+    void addNode(T node_data, int key){
         this->length=this->length+1;
 
         if(first==nullptr){
@@ -93,12 +108,14 @@ public:
             first->set_prev(nullptr);
             last=first;
             iterator=first;
+            first->set_key(key);
         }
         else{
             listNode<T>* new_node = new listNode<T>;
             new_node->set_data(node_data);
             new_node->set_prev(last);
             new_node->set_next(nullptr);
+            new_node->set_key(key);
             last->set_next(new_node);
         }
 
@@ -110,6 +127,8 @@ public:
             return this->iterator->get_data();
 
     }
+
+
     T get_next(){
         if ((iterator!=nullptr)||(iterator->get_next()!=nullptr)) {
             iterator = iterator->get_next();
@@ -144,9 +163,15 @@ public:
 
     }
 
-    listNode<T>* add_node_after(listNode<T> * node_to_add_after, T data){
+    listNode<T>* add_node_after(listNode<T> * node_to_add_after, T data, int
+    key){
+
+//        if(node_to_add_after== nullptr){
+//            listNode<T>* temp=first;
+//        }
 
         listNode<T>* new_node=new listNode<T>;
+
         new_node->set_prev(node_to_add_after);
         new_node->set_next(node_to_add_after->get_next());
         new_node->set_data(data);
@@ -167,8 +192,6 @@ public:
         }
 
     }
-
-
 
 };
 
