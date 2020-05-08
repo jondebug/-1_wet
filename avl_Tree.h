@@ -8,6 +8,8 @@
 #ifndef INC_1_WET_NEW_AVL_TREE_H
 #define INC_1_WET_NEW_AVL_TREE_H
 #include <iostream>
+
+
 using namespace std;
 
 template<typename T,typename S>
@@ -22,8 +24,11 @@ class treeNode {
     T data;
 public:
 
-    treeNode (T data,S key):left_son(nullptr), right_son(nullptr),father(nullptr),
-                            height(0),key(key),data(data){};
+
+    treeNode(T data, S key):left_son(nullptr), right_son(nullptr),father(nullptr),
+                                            height(0),key(key),data(data){};
+
+
 //    ~treeNode(){
 //        if (left_son != nullptr)
 //            left_son= nullptr;
@@ -36,6 +41,7 @@ public:
 //        delete &height;
 //
 //    }
+
 
     void set_data(T data){
         this->data=data;
@@ -94,6 +100,7 @@ public:
     }
 
 };
+
 template<typename T,typename S>
 class avl_Tree{
 
@@ -118,7 +125,7 @@ public:
 
             return;
         } else
-            recurtionAdd(root,data,key);
+            recursionAdd(root, data, key);
 
 
         //treeNode<T,S>* largest=new treeNode<T,S>(0,0); //TODO mabye need to change to new treeNode
@@ -129,7 +136,7 @@ public:
         }
         largestNode=largest;
     }
-    int get_balanceFactor(treeNode<T,S> *node){
+    static int get_balanceFactor(treeNode<T,S> *node){
         return get_height_addition(node->get_left())- get_height_addition
                 (node->get_right());
 
@@ -179,7 +186,7 @@ public:
     }
 
 
-    treeNode<T,S>* searchKey(S key,treeNode<T,S> *node){
+    static treeNode<T,S>* searchKey(S key,treeNode<T,S> *node){
         if (node==nullptr)
             return nullptr;
         if(key==node->get_key())
@@ -191,7 +198,7 @@ public:
     }
 
 
-    void recurtionAdd(treeNode<T,S> *root, T to_add, S key)
+    void recursionAdd(treeNode<T,S> *root, T to_add, S key)
     {
         if (root->get_key()==key) {// new node already exists
             return ;
@@ -211,7 +218,7 @@ public:
                 return;
 
             } else {
-                recurtionAdd(root->get_right(),to_add,key);
+                recursionAdd(root->get_right(), to_add, key);
 
                 return;
             }
@@ -232,13 +239,13 @@ public:
             }
             else {
 
-                recurtionAdd(root->get_left(), to_add,key);
+                recursionAdd(root->get_left(), to_add, key);
             }
         }
     }
 
 
-    int get_height_addition(treeNode<T,S>* node){
+    static int get_height_addition(treeNode<T,S>* node){
         if (node)
             return node->get_height();
         else return -1;
@@ -586,4 +593,6 @@ public:
 
 
 };
+
+
 #endif //INC_1_WET_NEW_AVL_TREE_H

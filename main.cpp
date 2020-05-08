@@ -502,6 +502,7 @@ int main(){
     tree.printTree();
     tree.treeClear();
     //tree.recurtionDestroy(tree.getRoot());
+    return 0;
 
     std::vector<int> vector;
     for (int i=1; i<=20; i++) vector.push_back(i);
