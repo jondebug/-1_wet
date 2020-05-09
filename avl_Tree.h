@@ -127,7 +127,7 @@ public:
         treeNode<T,S> *tree=tree_create_helper(height+1,nullptr);
         root=tree;
         int numberToDelete=pow(2,height+1)-1-m;
-        delete_unwanted_nodes(tree,numberToDelete);
+        delete_unwanted_nodes(tree,numberToDelete,true, nullptr);
         int counter=0;
         set_value_inOrder(tree,m,counter);
         largestNode=getLargest();
@@ -135,19 +135,26 @@ public:
 
     }
 
-    void delete_unwanted_nodes(treeNode<T,S> *node,int &numberToDelete)
+    void delete_unwanted_nodes(treeNode<T,S> *node,int &numberToDelete, bool
+    right_son , treeNode<T,S> *Father)
     {
         if ((node== nullptr)||(numberToDelete==0)) return;
-        delete_unwanted_nodes(node->get_right(),numberToDelete);
+        delete_unwanted_nodes(node->get_right(),numberToDelete,true,node);
 
         if (numberToDelete==0) return;
         if (node->get_height()==0) {
+            if ((right_son)&&(Father!= nullptr)){
+                Father->set_right(nullptr);
+            }
+            else{
+                if(Father!= nullptr) Father->set_left(nullptr);
+            }
             delete node;
             node=nullptr;
             numberToDelete--;
             return;
         }
-        delete_unwanted_nodes(node->get_left(),numberToDelete);
+        delete_unwanted_nodes(node->get_left(),numberToDelete,false, node);
         node->set_height(std::max(get_height_addition(node->get_left()),
                                   get_height_addition(node->get_right()))+1);
     }
