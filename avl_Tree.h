@@ -4,7 +4,7 @@
 
 
 
-
+#include <cmath>
 #ifndef INC_1_WET_NEW_AVL_TREE_H
 #define INC_1_WET_NEW_AVL_TREE_H
 #include <iostream>
@@ -24,6 +24,11 @@ public:
 
     treeNode (T data,S key):left_son(nullptr), right_son(nullptr),father(nullptr),
                             height(0),key(key),data(data){};
+
+
+    treeNode():left_son(nullptr), right_son(nullptr),father(nullptr),
+    height(0){};
+
 //    ~treeNode(){
 //        if (left_son != nullptr)
 //            left_son= nullptr;
@@ -39,6 +44,10 @@ public:
 
     void set_data(T data){
         this->data=data;
+    }
+
+    void set_key(S key){
+        this->key=key;
     }
 
     void set_father(treeNode* father){
@@ -66,7 +75,13 @@ public:
         key=temp.key;
 
     }
-
+//    ~treeNode<T,S>(){
+//        delete data;
+//        delete key;
+//        left_son= nullptr;
+//        right_son= nullptr;
+//        father= nullptr;
+//    }
 
     treeNode* get_left(){
         //       if (this== nullptr)
@@ -100,11 +115,66 @@ class avl_Tree{
     treeNode<T,S> * root;
 
     treeNode<T,S> * largestNode;
+    treeNode<T,S> * smallestNode;
 
 
 
 public:
-    avl_Tree(): root(nullptr), largestNode(nullptr){};
+    avl_Tree(): root(nullptr), largestNode(nullptr),smallestNode(nullptr){};
+
+    avl_Tree(int m){
+        int height=floor(log2(m));
+        treeNode<T,S> *tree=tree_create_helper(height+1,nullptr);
+        root=tree;
+        int numberToDelete=pow(2,height+1)-1-m;
+        delete_unwanted_nodes(tree,numberToDelete);
+        int counter=0;
+        set_value_inOrder(tree,m,counter);
+        largestNode=getLargest();
+        smallestNode=getSmallest();
+
+    }
+
+    void delete_unwanted_nodes(treeNode<T,S> *node,int &numberToDelete)
+    {
+        if ((node== nullptr)||(numberToDelete==0)) return;
+        delete_unwanted_nodes(node->get_right(),numberToDelete);
+
+        if (numberToDelete==0) return;
+        if (node->get_height()==0) {
+            delete node;
+            node=nullptr;
+            numberToDelete--;
+            return;
+        }
+        delete_unwanted_nodes(node->get_left(),numberToDelete);
+        node->set_height(std::max(get_height_addition(node->get_left()),
+                                  get_height_addition(node->get_right()))+1);
+    }
+
+    treeNode<T,S>* tree_create_helper(int height,treeNode<T,S> *father){
+        if (height<=0) return nullptr;
+        treeNode<T,S> *tree = new treeNode<T,S>();
+        tree->set_father(father);
+        tree->set_height(height-1);
+        tree->set_left(tree_create_helper(height-1,tree));
+        tree->set_right(tree_create_helper(height-1,tree));
+        return tree;
+    }
+
+    void set_value_inOrder(treeNode<T,S> *node,int m,int &counter){
+        if ((node==nullptr)||(counter>m)) return;
+        set_value_inOrder(node->get_left(),m,counter);
+        node->set_data(counter);
+        node->set_key(counter);
+        counter++;
+        set_value_inOrder(node->get_right(),m,counter);
+
+
+
+    }
+
+
 
     void add_treeNode(T data,S key) {
 
@@ -128,6 +198,10 @@ public:
             largest=largest->get_right();
         }
         largestNode=largest;
+        smallestNode=findLeftMost(root);
+
+
+
     }
     int get_balanceFactor(treeNode<T,S> *node){
         return get_height_addition(node->get_left())- get_height_addition
@@ -325,19 +399,108 @@ public:
     }
 
     template<typename P>
-    int printKmax(int &k, P p){
+   int printKmax(int &k, P p) {
         int counter = 0;
-        treeNode<T, S> *curr=largestNode;
+        treeNode<T, S> *curr = largestNode;
         treeNode<T, S> *last = nullptr;
 
-        while (k>0&&(curr!= nullptr)) {
+        // while (k>0&&(curr!= nullptr)) {
+        while ((counter < k) && (curr != nullptr)) {
+
             if (curr->get_right() == last) { //we finished with right sub tree
-                p(k,curr);
+                p(k, curr);
                 counter++;
 
-                if (curr->get_left()!= nullptr) { //we finished with right sub tree -> go to left sub tree
+                if (curr->get_left() !=nullptr) { //we finished with right sub tree -> go to left sub tree
                     curr = findRightMost(curr->get_left());
-                    last=curr->get_right();
+                    last = curr->get_right();
+                } else { //we finished with both left and right sub tree, and there is no left sub tree
+                    last = curr;
+                    curr = curr->get_father();
+                }
+
+            } else if (last->get_father() ==
+                       curr) { //finished with both left and right sub trees
+                last = curr;
+                curr = last->get_father();
+            }
+        }
+
+        return counter;
+    }
+
+//    int printKmax(int k){ // OLD working VERSTION - not generic
+//        int counter = 0;
+//        treeNode<T, S> *curr=largestNode;
+//        treeNode<T, S> *last = nullptr;
+//
+//        while ((counter < k)&&(curr!= nullptr)) {
+//            if (curr->get_right() == last) { //we finished with right sub tree
+//                std::cout << curr->get_data(); //print root of subtree
+//                std::cout << ",";
+//                counter++;
+//
+//                if (curr->get_left()!= nullptr) { //we finished with right sub tree -> go to left sub tree
+//                    curr = findRightMost(curr->get_left());
+//                    last=curr->get_right();
+//                }
+//                else { //we finished with both left and right sub tree, and there is no left sub tree
+//                    last = curr;
+//                    curr = curr->get_father();
+//                }
+//
+//            } else if (last->get_father() == curr) { //finished with both left and right sub trees
+//                last = curr;
+//                curr = last->get_father();
+//            }
+//        }
+//        return counter;
+//    }
+
+
+
+//    int printKmin(int k){ // OLD VERSTION
+//        int counter = 0;
+//        treeNode<T, S> *curr=smallestNode;
+//        treeNode<T, S> *last = nullptr;
+//
+//        while ((counter < k)&&(curr!= nullptr)) {
+//            if (curr->get_left() == last) { //we finished with left sub tree
+//                std::cout << curr->get_data(); //print root of subtree
+//                std::cout << ",";
+//                counter++;
+//
+//                if (curr->get_right()!= nullptr) { //we finished with left sub tree -> go to right sub tree
+//                    curr = findLeftMost(curr->get_right());
+//                    last=curr->get_left();
+//                }
+//                else { //we finished with both left and right sub tree, and there is no left sub tree
+//                    last = curr;
+//                    curr = curr->get_father();
+//                }
+//
+//            } else if (last->get_father() == curr) { //finished with both left and right sub trees
+//                last = curr;
+//                curr = last->get_father();
+//            }
+//        }
+//        return counter;
+//    }
+
+    template<typename P>
+    int printKmin(int &k, P p) {
+                int counter = 0;
+        treeNode<T, S> *curr=smallestNode;
+        treeNode<T, S> *last = nullptr;
+
+        while ((counter < k)&&(curr!= nullptr)) {
+            if (curr->get_left() == last) { //we finished with left sub tree
+                p(k, curr);
+                counter++;
+
+                if (curr->get_right()!= nullptr) { //we finished with left sub tree -> go to right sub tree
+                    curr = findLeftMost(curr->get_right());
+                    last=curr->get_left();
                 }
                 else { //we finished with both left and right sub tree, and there is no left sub tree
                     last = curr;
@@ -350,10 +513,8 @@ public:
             }
         }
         return counter;
+
     }
-
-
-
 
     treeNode<T,S>* findRightMost(treeNode<T,S>* node){
         //treeNode<T, S> *rightest = root->get_left();
@@ -376,6 +537,11 @@ public:
     treeNode<T,S>* getLargest(){
         return largestNode;
     }
+
+    treeNode<T,S>* getSmallest(){
+        return smallestNode;
+    }
+
     void removeRoot(int key) {
 
         if ((root->get_right() == nullptr) && root->get_left() == nullptr) {
@@ -499,6 +665,7 @@ public:
         repairBF(Father);
         if (root == nullptr) return;
         largestNode=findRightMost(root);
+        smallestNode=findLeftMost(root);
         return;
 
 
@@ -515,6 +682,7 @@ public:
             repairBF(root);
             if (root == nullptr) return;
             largestNode=findRightMost(root);
+
             return;
         }
         treeNode<T,S>* Father=NodeToRemove->get_father();
@@ -528,14 +696,16 @@ public:
 
         {
             removeLeaf(NodeToRemove,rightSon,Father);
+            largestNode=findRightMost(root);
+            smallestNode=findLeftMost(root);
             return;
+
         }
             //Node has one son
         else if((NodeToRemove->get_left()== nullptr)||(NodeToRemove->get_right
                 ()==nullptr)){
 
             removeOneSonNode(NodeToRemove, rightSon, Father);
-            largestNode=findRightMost(root);
             return;
         }
         //Node to remove has two children
@@ -553,6 +723,7 @@ public:
         removeOneSonNode(NextLargest, NodeToRemove->get_right() == NextLargest,
                          NextLargest->get_father());
         largestNode=findRightMost(root);
+        smallestNode=findLeftMost(root);
 
 
 
