@@ -67,6 +67,8 @@ public:
         return this->data;
     }
 
+
+
     void operator= (listNode<T>* node){
         this->next=node->next;
         this->prev=node->prev;
@@ -138,10 +140,18 @@ public:
 
     }
 
-    T get_first() {
+    T get_first_data() {
         iterator = this->first;
         return iterator->get_data();
     }
+
+    listNode<T>* get_first() {
+        iterator = this->first;
+        return iterator;
+    }
+
+
+
 
     listNode<T>* get_current_node(){
         return iterator;
@@ -161,6 +171,23 @@ public:
 
         }
 
+    }
+
+    void remove_node(listNode<T> * node_to_remove) {
+        if (node_to_remove->get_prev() != nullptr) {
+             node_to_remove->get_prev()->set_next(node_to_remove->get_next());
+         }
+        else{ // this node is first in list
+            first=node_to_remove->get_next();
+        }
+        if (node_to_remove->get_next() != nullptr) {
+            node_to_remove->get_next()->set_prev(node_to_remove->get_prev());
+        }
+        else{ // this node is last in list
+            last=node_to_remove->get_prev();
+        }
+
+        delete node_to_remove;
     }
 
     listNode<T>* add_node_after(listNode<T> * node_to_add_after, T data, int
