@@ -17,6 +17,7 @@ class listNode {
     T data;
 
     int key;
+
 public:
 
 //

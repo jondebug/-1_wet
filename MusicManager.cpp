@@ -8,7 +8,9 @@
 //#include <array>
 
 
+MusicManager::MusicManager(){
 
+}
 
 StatusType MusicManager::AddDataCenter(int artistID, int numOfSongs) {
     try {

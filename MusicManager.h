@@ -43,23 +43,6 @@ public:
     }
 };
 
-    class Count{
-    public:
-        void operator()(int numOfsongs,int &k, treeNode<int,int>* song_node,int* artists,int* songs,int artistID){
-            k--;
-        }
-    };
-
-    class travel_song_tree{
-    public:
-        Count c;
-        void operator()(int numOfsongs,int &k,treeNode<avl_Tree<int,int>*,int>* artist_node,int* artists,int* songs,int artistID){
-            //artist_node->get_data()->printKmin(k,c);
-            artist_node->get_data()->printKmin(0,numOfsongs,artists,songs,0,c);
-
-        }
-    };
-
 
     class array_len{
 public:
@@ -77,6 +60,9 @@ class MusicManager{
     avl_Tree<array_len*,int>* allArtistsTree;
 
 public:
+
+    MusicManager ();
+
     StatusType RemoveArtistFromDB(int artistID);
 
     double_sided_list<avl_Tree<avl_Tree<int,int>*,int>*>* get_list(){

@@ -1,21 +1,17 @@
-//
-// Created by Almog on 5/10/2020.
-//
+/***************************************************************************/
+/*                                                                         */
+/* 234218 Data DSs 1, Winter 2019-2020                                     */
+/* Homework : Wet 1                                                        */
+/*                                                                         */
+/***************************************************************************/
 
-//
-//#include <iostream>
-////#include "point.h"
-//#include "double_sided_list.h"
-//#include "avl_Tree.h"
-//#include <iostream>
-//#include "avl_Tree.h"
-//#include "MusicManager.h"
-//#include <ostream>
-//#include <random>
-//#include <chrono>
-//#include <algorithm>
-
-/**************************************************************************/
+/***************************************************************************/
+/*                                                                         */
+/* File Name : main1.cpp                                                   */
+/*                                                                         */
+/* Holds the "int main()" function and the parser of the shell's           */
+/* command line.                                                           */
+/***************************************************************************/
 
 #include <assert.h>
 #include <stdio.h>
