@@ -55,9 +55,9 @@ public:
 
 class MusicManager{
 
-    double_sided_list<avl_Tree<avl_Tree<int,int>*,int>*>* popularSongList;
+    double_sided_list<avl_Tree<avl_Tree<int,int>*,int>*> popularSongList;
 
-    avl_Tree<array_len*,int>* allArtistsTree;
+    avl_Tree<array_len*,int> allArtistsTree;
 
 public:
 
@@ -65,7 +65,7 @@ public:
 
     StatusType RemoveArtistFromDB(int artistID);
 
-    double_sided_list<avl_Tree<avl_Tree<int,int>*,int>*>* get_list(){
+    double_sided_list<avl_Tree<avl_Tree<int,int>*,int>*> get_list(){
         return popularSongList;
     }
 
@@ -74,6 +74,8 @@ public:
     void QuitDB();
     StatusType NumberOfStreamsDB(int artistID, int songID, int *streams);
     StatusType GetRecommendedSongsDB(int numOfSongs, int *artists, int *songs);
+
+    ~MusicManager();
 
 };
 

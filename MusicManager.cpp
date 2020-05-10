@@ -1,3 +1,5 @@
+
+
 //
 // Created by jonathan_pc on 5/8/2020.
 //
@@ -8,9 +10,7 @@
 //#include <array>
 
 
-MusicManager::MusicManager(){
 
-}
 
 StatusType MusicManager::AddDataCenter(int artistID, int numOfSongs) {
     try {
@@ -22,21 +22,21 @@ StatusType MusicManager::AddDataCenter(int artistID, int numOfSongs) {
 
         new_array->array=new listNode<avl_Tree<avl_Tree<int,int>*,int>*>*[numOfSongs];
         for (int i=0;i<numOfSongs;i++){
-            new_array->array[i]=popularSongList->get_first();
+            new_array->array[i]=popularSongList.get_first();
         }
 
         new_array->len = numOfSongs;
 
-        if (this->allArtistsTree->searchKey(artistID,
-                                            allArtistsTree->getRoot()) ==
+        if (this->allArtistsTree.searchKey(artistID,
+                                           allArtistsTree.getRoot()) ==
             nullptr)
             return FAILURE;
 
-        this->allArtistsTree->add_treeNode(new_array, artistID);
+        this->allArtistsTree.add_treeNode(new_array, artistID);
 
         avl_Tree<int, int> *new_song_tree = new avl_Tree<int, int>(numOfSongs);
 
-        popularSongList->get_first_data()->add_treeNode(new_song_tree, artistID);
+        popularSongList.get_first_data()->add_treeNode(new_song_tree, artistID);
 
         return SUCCESS;
     }
@@ -51,13 +51,14 @@ StatusType MusicManager::RemoveArtistFromDB(int artistID) {
     try {
 
         if (artistID <= 0) return INVALID_INPUT; //artist<=0 => invalid
-        if (allArtistsTree->searchKey(artistID, allArtistsTree->getRoot()) ==
+        if (allArtistsTree.searchKey(artistID, allArtistsTree.getRoot()) ==
             nullptr)
             return FAILURE;
 
 
-        array_len *songsArray = allArtistsTree->searchKey(artistID,
-                                                          allArtistsTree->getRoot())->get_data();
+        array_len *songsArray = allArtistsTree.searchKey(artistID,
+                                                         allArtistsTree
+                                                                 .getRoot())->get_data();
 
         for (int i = 0; i < songsArray->len; i++) {
             songsArray->array[i]->get_data()->removeByKey(artistID);
@@ -65,27 +66,28 @@ StatusType MusicManager::RemoveArtistFromDB(int artistID) {
 
             if ((songsArray->array[i]->get_data()->getRoot() == nullptr) &&
                 (songsArray->array[i]->get_key() != 0)) {
-                popularSongList->remove_node(songsArray->array[i]);
+                popularSongList.remove_node(songsArray->array[i]);
             }
-            allArtistsTree->removeByKey(artistID);
+            allArtistsTree.removeByKey(artistID);
         }
 
         return SUCCESS;
     }
-        catch (std::bad_alloc& e){
-            return ALLOCATION_ERROR;
-        }
+    catch (std::bad_alloc& e){
+        return ALLOCATION_ERROR;
+    }
 }
 
 
 StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
     try {
-        if (allArtistsTree->searchKey(ArtistId,
-                                      allArtistsTree->getRoot()) == nullptr)
+        if (allArtistsTree.searchKey(ArtistId,
+                                     allArtistsTree.getRoot()) == nullptr)
             return FAILURE;
 
-        array_len *arr = allArtistsTree->searchKey(ArtistId,
-                                                   allArtistsTree->getRoot())->get_data();
+        array_len *arr = allArtistsTree.searchKey(ArtistId,
+                                                  allArtistsTree.getRoot())
+                ->get_data();
         int numOfSongs = arr->len;
         if (numOfSongs <= songID) return INVALID_INPUT;
         //arr->array[songID]++;
@@ -101,7 +103,7 @@ StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
         listNode<avl_Tree<avl_Tree<int, int> *, int> *> *nextNode = arr->array[songID]->get_next();
         if (artistTree->getRoot() ==
             nullptr) { //we removed the last songs with this number of plays
-            popularSongList->remove_node(arr->array[songID]);
+            popularSongList.remove_node(arr->array[songID]);
         }
 
 
@@ -115,10 +117,10 @@ StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
             newArtistTree->add_treeNode(newSongTree, ArtistId);
 
             if (nextNode == nullptr) { //this song is now the most played song
-                popularSongList->addNode(newArtistTree, newPlays);
+                popularSongList.addNode(newArtistTree, newPlays);
             } else
-                popularSongList->add_node_after(nextNode->get_prev(),
-                                                newArtistTree, newPlays);
+                popularSongList.add_node_after(nextNode->get_prev(),
+                                               newArtistTree, newPlays);
 
         } else { //the next node exists and its the right one!
 
@@ -144,27 +146,29 @@ StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
 }
 
 void MusicManager::QuitDB() {
-    delete this; //TODO -check if works
+//    delete this; //TODO -check if works
 }
 
 StatusType MusicManager::NumberOfStreamsDB(int artistID, int songID, int *streams) {
-    if (allArtistsTree->searchKey(artistID,allArtistsTree->getRoot())== nullptr)
+    if (allArtistsTree.searchKey(artistID,allArtistsTree.getRoot())== nullptr)
         return FAILURE;
-    array_len *songsArray = allArtistsTree->searchKey(artistID,
-                                                      allArtistsTree->getRoot())->get_data();
-   if (songID>=songsArray->len) return INVALID_INPUT;
-   int key=(songsArray->array[songID]->get_key());
-   streams=&key;
+    array_len *songsArray = allArtistsTree.searchKey(artistID,
+                                                     allArtistsTree.getRoot
+                                                             ())->get_data();
+    if (songID>=songsArray->len) return INVALID_INPUT;
+    int key=(songsArray->array[songID]->get_key());
+    streams=&key;
 
-   return SUCCESS;
+    return SUCCESS;
 
 }
 
 StatusType MusicManager::GetRecommendedSongsDB(int numOfSongs, int *artists,
-                                  int *songs) {
+                                               int *songs) {
     //if there are less songs than numOfSongs -> return FALIURE:
     print_song_tree p;
-    listNode<avl_Tree<avl_Tree<int,int>*,int>*>* iterator=popularSongList->get_last();
+    listNode<avl_Tree<avl_Tree<int,int>*,int>*>* iterator=popularSongList
+            .get_last();
     int counter=numOfSongs;
     while((iterator!=nullptr)&&(counter>0)){
         iterator->get_data()->printKmin(numOfSongs,counter,artists,songs,0,p);
@@ -176,6 +180,27 @@ StatusType MusicManager::GetRecommendedSongsDB(int numOfSongs, int *artists,
 
     return SUCCESS;
 }
+
+
+
+MusicManager::MusicManager() {
+
+//    popularSongList=new double_sided_list<avl_Tree<avl_Tree<int, int> *, int>
+//            *>;
+//    allArtistsTree = new avl_Tree<array_len*,int>;
+
+}
+
+//MusicManager::~MusicManager() {
+//
+////    delete popularSongList;
+//
+//    delete allArtistsTree;
+//
+//
+//}
+
+
 
 
 
