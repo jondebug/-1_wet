@@ -28,7 +28,7 @@ StatusType MusicManager::AddDataCenter(int artistID, int numOfSongs) {
         new_array->len = numOfSongs;
 
         if (this->allArtistsTree.searchKey(artistID,
-                                           allArtistsTree.getRoot()) ==
+                                           allArtistsTree.getRoot()) !=
             nullptr)
             return FAILURE;
 
@@ -184,10 +184,15 @@ StatusType MusicManager::GetRecommendedSongsDB(int numOfSongs, int *artists,
 
 
 MusicManager::MusicManager() {
+    avl_Tree<avl_Tree<int, int> *, int> *zero_tree = new avl_Tree<avl_Tree<int,
+            int> *, int>;
 
-//    popularSongList=new double_sided_list<avl_Tree<avl_Tree<int, int> *, int>
-//            *>;
-//    allArtistsTree = new avl_Tree<array_len*,int>;
+    popularSongList =*new double_sided_list<avl_Tree<avl_Tree<int, int> *,
+            int>*>;
+
+
+    popularSongList.addNode(zero_tree, 0);
+    allArtistsTree =*new avl_Tree<array_len*,int>;
 
 }
 

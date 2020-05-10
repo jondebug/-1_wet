@@ -130,8 +130,8 @@ public:
         delete_unwanted_nodes(tree,numberToDelete,true, nullptr);
         int counter=0;
         set_value_inOrder(tree,m,counter);
-        largestNode=getLargest();
-        smallestNode=getSmallest();
+        largestNode=findRightMost(root);
+        smallestNode=findLeftMost(root);
 
     }
 
