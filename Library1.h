@@ -20,6 +20,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+//#include "MusicManager.h"
 
 /* Return Values
  * ----------------------------------- */
