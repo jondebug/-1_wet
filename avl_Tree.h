@@ -495,14 +495,15 @@ public:
 //    }
 
     template<typename P>
-    int printKmin(int &k, P p) {
-                int counter = 0;
+    int printKmin(int num,int &k,int *arr1,int *arr2,int id, P p) {
+        int counter = 0;
         treeNode<T, S> *curr=smallestNode;
         treeNode<T, S> *last = nullptr;
 
+
         while ((counter < k)&&(curr!= nullptr)) {
             if (curr->get_left() == last) { //we finished with left sub tree
-                p(k, curr);
+                p(num,k,curr,arr1,arr2,id);
                 counter++;
 
                 if (curr->get_right()!= nullptr) { //we finished with left sub tree -> go to right sub tree
@@ -519,9 +520,40 @@ public:
                 curr = last->get_father();
             }
         }
-        return counter;
+        return k; //k is the number of items need to be printed after this function
 
     }
+
+
+//    template<typename P> //working version
+//    int printKmin(int &k, P p) {
+//                int counter = 0;
+//        treeNode<T, S> *curr=smallestNode;
+//        treeNode<T, S> *last = nullptr;
+//
+//
+//        while ((counter < k)&&(curr!= nullptr)) {
+//            if (curr->get_left() == last) { //we finished with left sub tree
+//                p(k, curr);
+//                counter++;
+//
+//                if (curr->get_right()!= nullptr) { //we finished with left sub tree -> go to right sub tree
+//                    curr = findLeftMost(curr->get_right());
+//                    last=curr->get_left();
+//                }
+//                else { //we finished with both left and right sub tree, and there is no left sub tree
+//                    last = curr;
+//                    curr = curr->get_father();
+//                }
+//
+//            } else if (last->get_father() == curr) { //finished with both left and right sub trees
+//                last = curr;
+//                curr = last->get_father();
+//            }
+//        }
+//        return k; //k is the number of items need to be printed
+//
+//    }
 
     treeNode<T,S>* findRightMost(treeNode<T,S>* node){
         //treeNode<T, S> *rightest = root->get_left();

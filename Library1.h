@@ -20,7 +20,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-//#include "MusicManager.h"
+//#include "avl_Tree.h"
 
 /* Return Values
  * ----------------------------------- */
@@ -45,6 +45,7 @@ StatusType NumberOfStreams(void *DS, int artistID, int songID, int *streams);
 StatusType GetRecommendedSongs(void *DS, int numOfSongs, int *artists, int *songs);
 
 void Quit(void** DS);
+
 
 #ifdef __cplusplus
 }
