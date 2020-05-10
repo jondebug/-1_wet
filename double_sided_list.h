@@ -150,6 +150,11 @@ public:
         return iterator;
     }
 
+    listNode<T>* get_last() {
+        iterator = this->last;
+        return iterator;
+    }
+
 
 
 

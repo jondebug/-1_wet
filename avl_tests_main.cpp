@@ -1,41 +1,52 @@
 #include <iostream>
 //#include "point.h"
 #include "double_sided_list.h"
-
 #include "avl_Tree.h"
-
 #include <iostream>
+#include "avl_Tree.h"
+#include "MusicManager.h"
+#include <ostream>
+#include <random>
+#include <chrono>
+#include <algorithm>
 
 
 
-class Print{
-public:
-    void operator()(int &k, treeNode<int,int>* node) {
 
-        cout<<node->get_data()<<",\n";
-        k--;
 
-    }
-};
-class print_song_tree{
-public:
-    void operator()(int &k, treeNode<int,int>* song_tree) {
-        Print p;
 
-        //song_tree->get_data()->printKmax(k,p); TODO: this like should work
-        //                                       TODO: when data is tree pointer
 
-    }
-};
-void print_in_order(treeNode<int,int>* t)
-{
-    if (t== nullptr)
-        return;
-    print_in_order(t->get_left());
-    cout<<t->get_data()<<"\n";
-    print_in_order(t->get_right());
+// -----------tree tests-------------
 
-}
+//class Print{
+//public:
+//    void operator()(int &k, treeNode<int,int>* node) {
+//
+//        cout<<node->get_data()<<",\n";
+//        k--;
+//
+//    }
+//};
+//class print_song_tree{
+//public:
+//    void operator()(int &k, treeNode<int,int>* song_tree) {
+//        Print p;
+//
+//        //song_tree->get_data()->printKmax(k,p); TODO: this like should work
+//        //                                       TODO: when data is tree pointer
+//    }
+//};
+//
+//
+//void print_in_order(treeNode<int,int>* t)
+//{
+//    if (t== nullptr)
+//        return;
+//    print_in_order(t->get_left());
+//    cout<<t->get_data()<<"\n";
+//    print_in_order(t->get_right());
+//
+//}
 
 /*
  * testAVLTree.cpp
@@ -44,13 +55,9 @@ void print_in_order(treeNode<int,int>* t)
  *      Author: shirel
  */
 
-#include "avl_Tree.h"
-#include <ostream>
-#include <random>
-#include <chrono>
-#include <algorithm>
 
-int main(){
+
+//int main(){
 //    avl_Tree<int, int> tree;
 //    tree.add_treeNode(8,8);
 //    tree.add_treeNode(3,3);
@@ -62,8 +69,8 @@ int main(){
     //tree.printKmin(x);
     //tree.printKmax(x);
 
-    avl_Tree<int, int> test_tree(10);
-    test_tree.printTree();
+//    avl_Tree<int, int> test_tree(10);
+//    test_tree.printTree();
 
 
 //    tree.add_treeNode(8,8);
@@ -546,6 +553,5 @@ int main(){
 //        std::cout << '\n';
 //    }
 //
-//    return 0;
-}
+//    return 0;}
 

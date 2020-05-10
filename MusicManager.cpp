@@ -2,10 +2,13 @@
 // Created by jonathan_pc on 5/8/2020.
 //
 #include "MusicManager.h"
-#include "library1.h"
+//#include "library1.h"
 
-#include <iostream>
-#include <array>
+//#include <iostream>
+//#include <array>
+
+
+
 
 StatusType MusicManager::AddDataCenter(int artistID, int numOfSongs) {
     try {
@@ -41,7 +44,7 @@ StatusType MusicManager::AddDataCenter(int artistID, int numOfSongs) {
     }
 }
 
-StatusType MusicManager:: RemoveArtistFromDB(int artistID) {
+StatusType MusicManager::RemoveArtistFromDB(int artistID) {
 
     if (artistID <= 0) return INVALID_INPUT; //artist<=0 => invalid
     if (allArtistsTree->searchKey(artistID, allArtistsTree->getRoot()) ==
@@ -98,11 +101,12 @@ StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
             avl_Tree<avl_Tree<int,int>*,int>* newArtistTree=new avl_Tree<avl_Tree<int,int>*,int>();
             newArtistTree->add_treeNode(newSongTree,ArtistId);
 
-            if(nextNode == nullptr) //this song is now the most played song
-                popularSongList->addNode(newArtistTree,newPlays);
+            if(nextNode == nullptr) { //this song is now the most played song
+                popularSongList->addNode(newArtistTree, newPlays);
+            }
             else
                 popularSongList->add_node_after(nextNode->get_prev(), newArtistTree, newPlays);
-                //song node is the node after the deleted node
+
         }
         else { //the next node exists and its the right one!
 
@@ -139,12 +143,30 @@ StatusType MusicManager::NumberOfStreamsDB(int artistID, int songID, int *stream
 
 }
 
-~MusicManager(){
-    delete popularSongList;
-    delete allArtistsTree;
+StatusType MusicManager::GetRecommendedSongsDB(int numOfSongs, int *artists,
+                                  int *songs) {
+    //if there are less songs than numOfSongs -> return FALIURE:
+    travel_song_tree t;
+    listNode<avl_Tree<avl_Tree<int,int>*,int>*>* iterator=popularSongList->get_last();
+    int counter=numOfSongs;
+    while((iterator!=nullptr)&&(counter>0)){
+        counter=iterator->get_data()->printKmin(0,counter,artists,songs,0,t);
+        iterator=iterator->get_prev();
+    }
 
+    if (counter<numOfSongs) return FAILURE;
+
+    //print the requested songs:
+    print_song_tree p;
+   iterator=popularSongList->get_last();
+   counter=numOfSongs;
+    while(counter<numOfSongs){
+        counter=iterator->get_data()->printKmin(numOfSongs,counter,artists,songs,0,p);
+        iterator=iterator->get_prev();
+    }
+
+    return SUCCESS;
 }
-
 
 
 

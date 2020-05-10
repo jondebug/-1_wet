@@ -56,10 +56,22 @@ StatusType NumberOfStreams(void *DS, int artistID, int songID, int *streams) {
     if ((!DS) || (songID < 0) || (artistID < 0)) {
         return INVALID_INPUT;
     }
-    ((MusicManager *) DS)->NumberOfStreamsDB(artistID,songID,streams);
+    StatusType res=((MusicManager *) DS)->NumberOfStreamsDB(artistID,songID,streams);
+    return res;
 }
 
 
+StatusType GetRecommendedSongs(void *DS, int numOfSongs, int *artists, int *songs){
+    if((!DS)||(numOfSongs<=0)) return INVALID_INPUT;
+    try {
+        StatusType res = ((MusicManager *) DS)->GetRecommendedSongsDB(
+                numOfSongs, artists, songs);
+        return res;
+    }
+    catch(std::bad_alloc& e){
+        return ALLOCATION_ERROR;
+    }
+}
 
 void Quit(void** DS){
     if (!DS){

@@ -17,7 +17,51 @@
 //    INVALID_INPUT = -3
 //} StatusType;
 
-class array_len{
+//functors:
+
+class Print{
+public:
+    void operator()(int numOfsongs,int &k, treeNode<int,int>* song_node,int* artists,int* songs,int artistID) {
+
+        //cout<<song_node->get_data()<<",\n";
+        artists[numOfsongs-k]=song_node->get_data();
+        songs[numOfsongs-k]=artistID;
+        k--;
+
+
+    }
+};
+
+class print_song_tree{
+public:
+    void operator()(int numOfsongs,int &k,treeNode<avl_Tree<int,int>*,int>* artist_node,int* artists,int* songs,int artistID) {
+        Print p;
+
+        artist_node->get_data()->printKmin(numOfsongs, k, artists, songs,
+                                           artist_node->get_key(), p);
+        //
+    }
+};
+
+    class Count{
+    public:
+        void operator()(int numOfsongs,int &k, treeNode<int,int>* song_node,int* artists,int* songs,int artistID){
+            k--;
+        }
+    };
+
+    class travel_song_tree{
+    public:
+        Count c;
+        void operator()(int numOfsongs,int &k,treeNode<avl_Tree<int,int>*,int>* artist_node,int* artists,int* songs,int artistID){
+            //artist_node->get_data()->printKmin(k,c);
+            artist_node->get_data()->printKmin(0,numOfsongs,artists,songs,0,c);
+
+        }
+    };
+
+
+    class array_len{
 public:
     //int* array;
     listNode<avl_Tree<avl_Tree<int,int>*,int>*>** array;
@@ -35,16 +79,15 @@ class MusicManager{
 public:
     StatusType RemoveArtistFromDB(int artistID);
 
-
     double_sided_list<avl_Tree<avl_Tree<int,int>*,int>*>* get_list(){
         return popularSongList;
     }
 
-    StatusType AddDataCenter(int artistID,int numOfSongs);
-    //StatusType AddArtist(MusicManager* DS, int ArtistId, int numOfSongs);
+    StatusType AddDataCenter(int artistID,int numOfSongs); // add artist function
     StatusType AddToSongCountDB(int ArtistId,int songID);
     void QuitDB();
     StatusType NumberOfStreamsDB(int artistID, int songID, int *streams);
+    StatusType GetRecommendedSongsDB(int numOfSongs, int *artists, int *songs);
 
 };
 
