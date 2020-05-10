@@ -46,84 +46,99 @@ StatusType MusicManager::AddDataCenter(int artistID, int numOfSongs) {
 
 StatusType MusicManager::RemoveArtistFromDB(int artistID) {
 
-    if (artistID <= 0) return INVALID_INPUT; //artist<=0 => invalid
-    if (allArtistsTree->searchKey(artistID, allArtistsTree->getRoot()) ==
-        nullptr)
-        return FAILURE;
+    try {
+
+        if (artistID <= 0) return INVALID_INPUT; //artist<=0 => invalid
+        if (allArtistsTree->searchKey(artistID, allArtistsTree->getRoot()) ==
+            nullptr)
+            return FAILURE;
 
 
-    array_len *songsArray = allArtistsTree->searchKey(artistID,
-                                                      allArtistsTree->getRoot())->get_data();
+        array_len *songsArray = allArtistsTree->searchKey(artistID,
+                                                          allArtistsTree->getRoot())->get_data();
 
-    for (int i = 0; i < songsArray->len; i++) {
-        songsArray->array[i]->get_data()->removeByKey(artistID);
+        for (int i = 0; i < songsArray->len; i++) {
+            songsArray->array[i]->get_data()->removeByKey(artistID);
 
 
-        if ((songsArray->array[i]->get_data()->getRoot() == nullptr) &&
-            (songsArray->array[i]->get_key() != 0)) {
-            popularSongList->remove_node(songsArray->array[i]);
+            if ((songsArray->array[i]->get_data()->getRoot() == nullptr) &&
+                (songsArray->array[i]->get_key() != 0)) {
+                popularSongList->remove_node(songsArray->array[i]);
+            }
+            allArtistsTree->removeByKey(artistID);
         }
-        allArtistsTree->removeByKey(artistID);
-    }
 
-    return SUCCESS;
+        return SUCCESS;
+    }
+        catch (std::bad_alloc& e){
+            return ALLOCATION_ERROR;
+        }
 }
 
 
 StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
-        if(allArtistsTree->searchKey(ArtistId,
-                                     allArtistsTree->getRoot())== nullptr) return FAILURE;
+    try {
+        if (allArtistsTree->searchKey(ArtistId,
+                                      allArtistsTree->getRoot()) == nullptr)
+            return FAILURE;
 
-      array_len* arr=allArtistsTree->searchKey(ArtistId,
-                                  allArtistsTree->getRoot())->get_data();
-        int numOfSongs=arr->len;
-        if (numOfSongs<=songID) return INVALID_INPUT;
+        array_len *arr = allArtistsTree->searchKey(ArtistId,
+                                                   allArtistsTree->getRoot())->get_data();
+        int numOfSongs = arr->len;
+        if (numOfSongs <= songID) return INVALID_INPUT;
         //arr->array[songID]++;
-        avl_Tree<avl_Tree<int,int>*,int>* artistTree=arr->array[songID]->get_data();
-        avl_Tree<int,int>* songTree=artistTree->searchKey(ArtistId,artistTree->getRoot())->get_data();
+        avl_Tree<avl_Tree<int, int> *, int> *artistTree = arr->array[songID]->get_data();
+        avl_Tree<int, int> *songTree = artistTree->searchKey(ArtistId,
+                                                             artistTree->getRoot())->get_data();
         songTree->removeByKey(songID);
-        if (songTree->getRoot()==nullptr){ //we removed this artist last song
+        if (songTree->getRoot() == nullptr) { //we removed this artist last song
             artistTree->removeByKey(ArtistId);
         }
-        int numberOfplays=arr->array[songID]->get_key();
-        int newPlays=numberOfplays+1;
-        listNode<avl_Tree<avl_Tree<int,int>*,int>*>* nextNode=arr->array[songID]->get_next();
-        if (artistTree->getRoot()==nullptr){ //we removed the last songs with this number of plays
+        int numberOfplays = arr->array[songID]->get_key();
+        int newPlays = numberOfplays + 1;
+        listNode<avl_Tree<avl_Tree<int, int> *, int> *> *nextNode = arr->array[songID]->get_next();
+        if (artistTree->getRoot() ==
+            nullptr) { //we removed the last songs with this number of plays
             popularSongList->remove_node(arr->array[songID]);
         }
 
 
-        if ((nextNode == nullptr) || (nextNode->get_key() != newPlays)) //we need to make a new node in a list
+        if ((nextNode == nullptr) || (nextNode->get_key() !=
+                                      newPlays)) //we need to make a new node in a list
         {
-            avl_Tree<int,int>* newSongTree=new avl_Tree<int,int>();
-            newSongTree->add_treeNode(songID,songID);
+            avl_Tree<int, int> *newSongTree = new avl_Tree<int, int>();
+            newSongTree->add_treeNode(songID, songID);
 
-            avl_Tree<avl_Tree<int,int>*,int>* newArtistTree=new avl_Tree<avl_Tree<int,int>*,int>();
-            newArtistTree->add_treeNode(newSongTree,ArtistId);
+            avl_Tree<avl_Tree<int, int> *, int> *newArtistTree = new avl_Tree<avl_Tree<int, int> *, int>();
+            newArtistTree->add_treeNode(newSongTree, ArtistId);
 
-            if(nextNode == nullptr) { //this song is now the most played song
+            if (nextNode == nullptr) { //this song is now the most played song
                 popularSongList->addNode(newArtistTree, newPlays);
+            } else
+                popularSongList->add_node_after(nextNode->get_prev(),
+                                                newArtistTree, newPlays);
+
+        } else { //the next node exists and its the right one!
+
+            treeNode<avl_Tree<int, int> *, int> *artistNode = nextNode->get_data()->searchKey(
+                    ArtistId, nextNode->get_data()->getRoot()); //song tree
+            //artist node - the node belog to this artist in the next tree
+            if (artistNode ==
+                nullptr) { //next node does not have songs from this artist
+                avl_Tree<int, int> *newSongTree = new avl_Tree<int, int>();
+                newSongTree->add_treeNode(songID, songID);
+
+                nextNode->get_data()->add_treeNode(newSongTree, ArtistId);
+            } else { //next node has songs from this artist
+                artistNode->get_data()->add_treeNode(songID, songID);
             }
-            else
-                popularSongList->add_node_after(nextNode->get_prev(), newArtistTree, newPlays);
 
         }
-        else { //the next node exists and its the right one!
-
-                treeNode<avl_Tree<int,int>*,int>* artistNode=nextNode->get_data()->searchKey(ArtistId, nextNode->get_data()->getRoot()); //song tree
-                //artist node - the node belog to this artist in the next tree
-                if (artistNode== nullptr){ //next node does not have songs from this artist
-                    avl_Tree<int,int>* newSongTree=new avl_Tree<int,int>();
-                    newSongTree->add_treeNode(songID,songID);
-
-                    nextNode->get_data()->add_treeNode(newSongTree, ArtistId);
-                }
-                else{ //next node has songs from this artist
-                    artistNode->get_data()->add_treeNode(songID,songID);
-                }
-
-        }
-    return SUCCESS;
+        return SUCCESS;
+    }
+    catch (std::bad_alloc& e){
+        return ALLOCATION_ERROR;
+    }
 }
 
 void MusicManager::QuitDB() {
@@ -146,24 +161,16 @@ StatusType MusicManager::NumberOfStreamsDB(int artistID, int songID, int *stream
 StatusType MusicManager::GetRecommendedSongsDB(int numOfSongs, int *artists,
                                   int *songs) {
     //if there are less songs than numOfSongs -> return FALIURE:
-    travel_song_tree t;
+    print_song_tree p;
     listNode<avl_Tree<avl_Tree<int,int>*,int>*>* iterator=popularSongList->get_last();
     int counter=numOfSongs;
     while((iterator!=nullptr)&&(counter>0)){
-        counter=iterator->get_data()->printKmin(0,counter,artists,songs,0,t);
+        iterator->get_data()->printKmin(numOfSongs,counter,artists,songs,0,p);
         iterator=iterator->get_prev();
     }
 
-    if (counter<numOfSongs) return FAILURE;
+    if (counter>0) return FAILURE;
 
-    //print the requested songs:
-    print_song_tree p;
-   iterator=popularSongList->get_last();
-   counter=numOfSongs;
-    while(counter<numOfSongs){
-        counter=iterator->get_data()->printKmin(numOfSongs,counter,artists,songs,0,p);
-        iterator=iterator->get_prev();
-    }
 
     return SUCCESS;
 }
