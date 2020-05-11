@@ -713,12 +713,16 @@ public:
     void removeByKey (S key){
 
         treeNode<T,S>* NodeToRemove=this->searchKey(key, root);
+
+        if (NodeToRemove==nullptr)
+            return;
         bool rightSon= false;
 
 
         if(NodeToRemove==this->root){
             this->removeRoot(key);
             repairBF(root);
+
             if (root == nullptr) return;
             largestNode=findRightMost(root);
 

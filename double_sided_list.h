@@ -120,6 +120,7 @@ public:
             new_node->set_next(nullptr);
             new_node->set_key(key);
             last->set_next(new_node);
+            last=new_node;
         }
 
 

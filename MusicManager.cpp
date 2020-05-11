@@ -118,10 +118,13 @@ StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
 
             if (nextNode == nullptr) { //this song is now the most played song
                 popularSongList.addNode(newArtistTree, newPlays);
-            } else
+                arr->array[songID]=popularSongList.get_last();
+
+            } else {
                 popularSongList.add_node_after(nextNode->get_prev(),
                                                newArtistTree, newPlays);
-
+                arr->array[songID] = nextNode->get_prev();
+            }
         } else { //the next node exists and its the right one!
 
             treeNode<avl_Tree<int, int> *, int> *artistNode = nextNode->get_data()->searchKey(
@@ -133,9 +136,13 @@ StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
                 newSongTree->add_treeNode(songID, songID);
 
                 nextNode->get_data()->add_treeNode(newSongTree, ArtistId);
+
+
+
             } else { //next node has songs from this artist
                 artistNode->get_data()->add_treeNode(songID, songID);
             }
+            arr->array[songID]=nextNode;
 
         }
         return SUCCESS;
@@ -157,7 +164,7 @@ StatusType MusicManager::NumberOfStreamsDB(int artistID, int songID, int *stream
                                                              ())->get_data();
     if (songID>=songsArray->len) return INVALID_INPUT;
     int key=(songsArray->array[songID]->get_key());
-    streams=&key;
+    *streams=key;
 
     return SUCCESS;
 

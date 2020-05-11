@@ -51,7 +51,8 @@ StatusType NumberOfStreams(void *DS, int artistID, int songID, int *streams) {
     if ((!DS) || (songID < 0) || (artistID < 0)) {
         return INVALID_INPUT;
     }
-    StatusType res=((MusicManager *) DS)->NumberOfStreamsDB(artistID,songID,streams);
+    StatusType res=((MusicManager *) DS)->NumberOfStreamsDB(artistID,songID,
+            streams);
     return res;
 }
 
