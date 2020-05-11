@@ -193,18 +193,13 @@ public:
 
             root = new_node;
 
-            return;
         } else
             recurtionAdd(root,data,key);
 
 
         //treeNode<T,S>* largest=new treeNode<T,S>(0,0); //TODO mabye need to change to new treeNode
-        treeNode<T,S>* largest=root;
-        largest=root;
-        while(largest->get_right()!=nullptr){
-            largest=largest->get_right();
-        }
-        largestNode=largest;
+
+        largestNode=findRightMost(root);
         smallestNode=findLeftMost(root);
 
 
@@ -501,7 +496,7 @@ public:
         treeNode<T, S> *last = nullptr;
 
 
-        while ((counter < k)&&(curr!= nullptr)) {
+        while ((0 < k)&&(curr!= nullptr)) {
             if (curr->get_left() == last) { //we finished with left sub tree
                 p(num,k,curr,arr1,arr2,id);
                 counter++;

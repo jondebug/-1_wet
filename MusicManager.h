@@ -24,8 +24,8 @@ public:
     void operator()(int numOfsongs,int &k, treeNode<int,int>* song_node,int* artists,int* songs,int artistID) {
 
         //cout<<song_node->get_data()<<",\n";
-        artists[numOfsongs-k]=song_node->get_data();
-        songs[numOfsongs-k]=artistID;
+        songs[numOfsongs-k]=song_node->get_data();
+        artists[numOfsongs-k]=artistID;
         k--;
 
 
