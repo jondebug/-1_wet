@@ -206,12 +206,23 @@ public:
 
         listNode<T>* new_node=new listNode<T>;
 
+        // all data for new node:
         new_node->set_prev(node_to_add_after);
         new_node->set_next(node_to_add_after->get_next());
         new_node->set_data(data);
+        new_node->set_key(key);
+
+        // all data for prev node:
         node_to_add_after->set_next(new_node);
-        if(node_to_add_after->get_next()!= nullptr)
-            node_to_add_after->get_next()->set_prev(new_node);
+        //all data for next node:
+
+//        if(node_to_add_after->get_next()!= nullptr)
+//            node_to_add_after->get_next()->set_prev(new_node);
+
+        //need to be changed to:
+        if(new_node->get_next()!= nullptr)
+            new_node->get_next()->set_prev(new_node);
+
         return new_node;
 
     }

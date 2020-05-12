@@ -202,8 +202,6 @@ public:
         largestNode=findRightMost(root);
         smallestNode=findLeftMost(root);
 
-
-
     }
     int get_balanceFactor(treeNode<T,S> *node){
         return get_height_addition(node->get_left())- get_height_addition
@@ -496,6 +494,7 @@ public:
         treeNode<T, S> *last = nullptr;
 
 
+
         while ((0 < k)&&(curr!= nullptr)) {
             if (curr->get_left() == last) { //we finished with left sub tree
                 p(num,k,curr,arr1,arr2,id);
@@ -720,7 +719,7 @@ public:
 
             if (root == nullptr) return;
             largestNode=findRightMost(root);
-
+            smallestNode=findLeftMost(root);
             return;
         }
         treeNode<T,S>* Father=NodeToRemove->get_father();
