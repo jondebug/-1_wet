@@ -102,8 +102,6 @@ StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
         int newPlays = numberOfplays + 1;
         listNode<avl_Tree<avl_Tree<int, int> *, int> *> *nextNode = arr->array[songID]->get_next();
 
-        //line for debug
-        listNode<avl_Tree<avl_Tree<int, int> *, int> *> *node_to_check=arr->array[songID];
 
         if (artistTree->getRoot() ==
             nullptr) { //we removed the last songs with this number of plays
