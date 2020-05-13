@@ -76,6 +76,7 @@ public:
         this->data=node->data;
     }
 
+
 };
 //---------------------------------------------
 
@@ -96,7 +97,7 @@ class double_sided_list {
 public:
 
 
-    double_sided_list():length(0), first(nullptr), last(nullptr), iterator(
+    double_sided_list():first(nullptr), last(nullptr),length(0), iterator(
             nullptr){};
 
 
@@ -227,11 +228,14 @@ public:
 
     }
 
-    virtual ~double_sided_list<T> (){
+    ~double_sided_list<T> (){
         listNode<T> *it = this->first;
         listNode<T> *temp = this->first;
         while(it!=nullptr){
             it=temp->get_next();
+            if (temp->get_data()!= nullptr)
+                delete temp->get_data();
+                //temp->get_data()->pointer_tree_destroy();
             delete temp;
             temp=it;
         }

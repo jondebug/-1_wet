@@ -82,6 +82,8 @@ static bool isInit = false;
 /***************************************************************************/
 
 int main(int argc, const char**argv) {
+    freopen("in1.txt","r",stdin);
+    freopen("out1.txt","w",stdout);
 
     char buffer[MAX_STRING_INPUT_SIZE];
 
@@ -97,7 +99,7 @@ int main(int argc, const char**argv) {
 /***************************************************************************/
 /* Command Checker                                                         */
 /***************************************************************************/
-
+static int counter=0;
 static commandType CheckCommand(const char* const command,
                                 const char** const command_arg) {
     if (command == NULL || strlen(command) == 0 || StrCmp("\n", command))
@@ -138,7 +140,7 @@ static errorType parser(const char* const command) {
     errorType rtn_val = error;
 
     commandType command_val = CheckCommand(command, &command_args);
-
+    counter++;
     switch (command_val) {
 
         case (INIT_CMD):

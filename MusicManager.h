@@ -75,7 +75,7 @@ public:
     StatusType NumberOfStreamsDB(int artistID, int songID, int *streams);
     StatusType GetRecommendedSongsDB(int numOfSongs, int *artists, int *songs);
 
-    ~MusicManager();
+   // ~MusicManager();
 
 };
 

@@ -155,7 +155,7 @@ StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
 }
 
 void MusicManager::QuitDB() {
-//    delete this; //TODO -check if works
+    delete this; //TODO -check if works
 }
 
 StatusType MusicManager::NumberOfStreamsDB(int artistID, int songID, int *streams) {
@@ -196,17 +196,20 @@ MusicManager::MusicManager() {
     avl_Tree<avl_Tree<int, int> *, int> *zero_tree = new avl_Tree<avl_Tree<int,
             int> *, int>;
 
-    popularSongList =*new double_sided_list<avl_Tree<avl_Tree<int, int> *,
-            int>*>;
+//    popularSongList =*new double_sided_list<avl_Tree<avl_Tree<int, int> *,
+//            int>*>;
 
 
     popularSongList.addNode(zero_tree, 0);
-    allArtistsTree =*new avl_Tree<array_len*,int>;
+    //allArtistsTree =*new avl_Tree<array_len*,int>;
 
 }
 
 //MusicManager::~MusicManager() {
-//
+    //delete popularSongList.get_first()->get_data();
+//    delete &allArtistsTree;
+//    delete &popularSongList;
+//}
 ////    delete popularSongList;
 //
 //    delete allArtistsTree;

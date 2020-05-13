@@ -42,6 +42,10 @@ public:
 //
 //    }
 
+//~treeNode(){
+////    delete &data;
+//}
+
     void set_data(T data){
         this->data=data;
     }
@@ -172,7 +176,12 @@ public:
     void set_value_inOrder(treeNode<T,S> *node,int m,int &counter){
         if ((node==nullptr)||(counter>m)) return;
         set_value_inOrder(node->get_left(),m,counter);
+//        int* data=new int;
+//        *data=counter;
+        //node->set_data(data);
+
         node->set_data(counter);
+
         node->set_key(counter);
         counter++;
         set_value_inOrder(node->get_right(),m,counter);
@@ -325,6 +334,16 @@ public:
         recurtionDestroy(node->get_right());
         delete node;
     }
+
+//    void pointer_tree_destroy(treeNode<T,S>* node){
+//    //delete of non int tree
+//        if (!node) return;
+//        recurtionDestroy(node->get_left());
+//        recurtionDestroy(node->get_right());
+//        delete node->get_data();
+//        delete node;
+//    }
+
 
     ~avl_Tree(){
         recurtionDestroy(root);
@@ -654,6 +673,8 @@ public:
 
                 repairBF(Father->get_left());
             }
+            largestNode=findRightMost(root);
+            smallestNode=findLeftMost(root);
             return;
 
         }
@@ -733,8 +754,8 @@ public:
 
         {
             removeLeaf(NodeToRemove,rightSon,Father);
-            largestNode=findRightMost(root);
-            smallestNode=findLeftMost(root);
+//            largestNode=findRightMost(root);
+//            smallestNode=findLeftMost(root);
             return;
 
         }
@@ -743,6 +764,8 @@ public:
                 ()==nullptr)){
 
             removeOneSonNode(NodeToRemove, rightSon, Father);
+            largestNode=findRightMost(root);
+            smallestNode=findLeftMost(root);
             return;
         }
         //Node to remove has two children
@@ -754,6 +777,8 @@ public:
 
         {
             removeLeaf(NextLargest,NodeToRemove->get_right() == NextLargest,NextLargest->get_father());
+            largestNode=findRightMost(root);
+            smallestNode=findLeftMost(root);
             return;
         }
 
