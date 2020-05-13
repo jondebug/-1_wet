@@ -21,10 +21,10 @@
 
 class Print{
 public:
-    void operator()(int numOfsongs,int &k, treeNode<int,int>* song_node,int* artists,int* songs,int artistID) {
+    void operator()(int numOfsongs,int &k, treeNode<int*,int>* song_node,int* artists,int* songs,int artistID) {
 
         //cout<<song_node->get_data()<<",\n";
-        songs[numOfsongs-k]=song_node->get_data();
+        songs[numOfsongs-k]=*song_node->get_data();
         artists[numOfsongs-k]=artistID;
         k--;
 
@@ -34,7 +34,7 @@ public:
 
 class print_song_tree{
 public:
-    void operator()(int numOfsongs,int &k,treeNode<avl_Tree<int,int>*,int>* artist_node,int* artists,int* songs,int artistID) {
+    void operator()(int numOfsongs,int &k,treeNode<avl_Tree<int*,int>*,int>* artist_node,int* artists,int* songs,int artistID) {
         Print p;
 
         artist_node->get_data()->printKmin(numOfsongs, k, artists, songs,
@@ -47,15 +47,21 @@ public:
     class array_len{
 public:
     //int* array;
-    listNode<avl_Tree<avl_Tree<int,int>*,int>*>** array;
+    listNode<avl_Tree<avl_Tree<int*,int>*,int>*>** array;
     int len;
-};
+
+    ~array_len();
+
+
+    };
+
+
 
 
 
 class MusicManager{
 
-    double_sided_list<avl_Tree<avl_Tree<int,int>*,int>*> popularSongList;
+    double_sided_list<avl_Tree<avl_Tree<int*,int>*,int>*> popularSongList;
 
     avl_Tree<array_len*,int> allArtistsTree;
 
@@ -65,7 +71,7 @@ public:
 
     StatusType RemoveArtistFromDB(int artistID);
 
-    double_sided_list<avl_Tree<avl_Tree<int,int>*,int>*> get_list(){
+    double_sided_list<avl_Tree<avl_Tree<int*,int>*,int>*> get_list(){
         return popularSongList;
     }
 

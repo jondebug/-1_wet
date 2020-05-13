@@ -7,9 +7,7 @@
 //#include "library1.h"
 
 //#include <iostream>
-//#include <array>
-
-
+//#include <arra
 
 
 StatusType MusicManager::AddDataCenter(int artistID, int numOfSongs) {
@@ -20,7 +18,7 @@ StatusType MusicManager::AddDataCenter(int artistID, int numOfSongs) {
 
         array_len *new_array = new array_len;
 
-        new_array->array=new listNode<avl_Tree<avl_Tree<int,int>*,int>*>*[numOfSongs];
+        new_array->array=new listNode<avl_Tree<avl_Tree<int*,int>*,int>*>*[numOfSongs];
         for (int i=0;i<numOfSongs;i++){
             new_array->array[i]=popularSongList.get_first();
         }
@@ -34,7 +32,7 @@ StatusType MusicManager::AddDataCenter(int artistID, int numOfSongs) {
 
         this->allArtistsTree.add_treeNode(new_array, artistID);
 
-        avl_Tree<int, int> *new_song_tree = new avl_Tree<int, int>(numOfSongs);
+        avl_Tree<int*,int> *new_song_tree = new avl_Tree<int*,int>(numOfSongs);
 
         popularSongList.get_first_data()->add_treeNode(new_song_tree, artistID);
 
@@ -81,18 +79,23 @@ StatusType MusicManager::RemoveArtistFromDB(int artistID) {
 
 StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
     try {
+        
+        
         if (allArtistsTree.searchKey(ArtistId,
                                      allArtistsTree.getRoot()) == nullptr)
             return FAILURE;
 
+        int *songIdInt=new int;
+        *songIdInt=songID;
+        
         array_len *arr = allArtistsTree.searchKey(ArtistId,
                                                   allArtistsTree.getRoot())
                 ->get_data();
         int numOfSongs = arr->len;
         if (numOfSongs <= songID) return INVALID_INPUT;
         //arr->array[songID]++;
-        avl_Tree<avl_Tree<int, int> *, int> *artistTree = arr->array[songID]->get_data();
-        avl_Tree<int, int> *songTree = artistTree->searchKey(ArtistId,
+        avl_Tree<avl_Tree<int*,int> *, int> *artistTree = arr->array[songID]->get_data();
+        avl_Tree<int*,int> *songTree = artistTree->searchKey(ArtistId,
                                                              artistTree->getRoot())->get_data();
         songTree->removeByKey(songID);
         if (songTree->getRoot() == nullptr) { //we removed this artist last song
@@ -100,7 +103,7 @@ StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
         }
         int numberOfplays = arr->array[songID]->get_key();
         int newPlays = numberOfplays + 1;
-        listNode<avl_Tree<avl_Tree<int, int> *, int> *> *nextNode = arr->array[songID]->get_next();
+        listNode<avl_Tree<avl_Tree<int*,int> *, int> *> *nextNode = arr->array[songID]->get_next();
 
 
         if (artistTree->getRoot() ==
@@ -112,10 +115,10 @@ StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
         if ((nextNode == nullptr) || (nextNode->get_key() !=
                                       newPlays)) //we need to make a new node in a list
         {
-            avl_Tree<int, int> *newSongTree = new avl_Tree<int, int>();
-            newSongTree->add_treeNode(songID, songID);
+            avl_Tree<int*,int> *newSongTree = new avl_Tree<int*,int>();
+            newSongTree->add_treeNode(songIdInt, songID);
 
-            avl_Tree<avl_Tree<int, int> *, int> *newArtistTree = new avl_Tree<avl_Tree<int, int> *, int>();
+            avl_Tree<avl_Tree<int*,int> *, int> *newArtistTree = new avl_Tree<avl_Tree<int*,int> *, int>();
             newArtistTree->add_treeNode(newSongTree, ArtistId);
 
             if (nextNode == nullptr) { //this song is now the most played song
@@ -129,20 +132,20 @@ StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
             }
         } else { //the next node exists and its the right one!
 
-            treeNode<avl_Tree<int, int> *, int> *artistNode = nextNode->get_data()->searchKey(
+            treeNode<avl_Tree<int*,int> *, int> *artistNode = nextNode->get_data()->searchKey(
                     ArtistId, nextNode->get_data()->getRoot()); //song tree
             //artist node - the node belog to this artist in the next tree
             if (artistNode ==
                 nullptr) { //next node does not have songs from this artist
-                avl_Tree<int, int> *newSongTree = new avl_Tree<int, int>();
-                newSongTree->add_treeNode(songID, songID);
+                avl_Tree<int*,int> *newSongTree = new avl_Tree<int*,int>();
+                newSongTree->add_treeNode(songIdInt, songID);
 
                 nextNode->get_data()->add_treeNode(newSongTree, ArtistId);
 
 
 
             } else { //next node has songs from this artist
-                artistNode->get_data()->add_treeNode(songID, songID);
+                artistNode->get_data()->add_treeNode(songIdInt, songID);
             }
             arr->array[songID]=nextNode;
 
@@ -176,7 +179,7 @@ StatusType MusicManager::GetRecommendedSongsDB(int numOfSongs, int *artists,
                                                int *songs) {
     //if there are less songs than numOfSongs -> return FALIURE:
     print_song_tree p;
-    listNode<avl_Tree<avl_Tree<int,int>*,int>*>* iterator=popularSongList
+    listNode<avl_Tree<avl_Tree<int*,int>*,int>*>* iterator=popularSongList
             .get_last();
     int counter=numOfSongs;
     while((iterator!=nullptr)&&(counter>0)){
@@ -193,10 +196,10 @@ StatusType MusicManager::GetRecommendedSongsDB(int numOfSongs, int *artists,
 
 
 MusicManager::MusicManager() {
-    avl_Tree<avl_Tree<int, int> *, int> *zero_tree = new avl_Tree<avl_Tree<int,
+    avl_Tree<avl_Tree<int*,int> *, int> *zero_tree = new avl_Tree<avl_Tree<int*,
             int> *, int>;
 
-//    popularSongList =*new double_sided_list<avl_Tree<avl_Tree<int, int> *,
+//    popularSongList =*new double_sided_list<avl_Tree<avl_Tree<int*,int> *,
 //            int>*>;
 
 
@@ -221,3 +224,7 @@ MusicManager::MusicManager() {
 
 
 
+array_len::~array_len() {
+    delete[] array;
+
+}

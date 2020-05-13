@@ -176,11 +176,11 @@ public:
     void set_value_inOrder(treeNode<T,S> *node,int m,int &counter){
         if ((node==nullptr)||(counter>m)) return;
         set_value_inOrder(node->get_left(),m,counter);
-//        int* data=new int;
-//        *data=counter;
-        //node->set_data(data);
+        int* data=new int;
+        *data=counter;
+        node->set_data(data);
 
-        node->set_data(counter);
+//        node->set_data(counter);
 
         node->set_key(counter);
         counter++;
@@ -332,6 +332,8 @@ public:
         if (!node) return;
         recurtionDestroy(node->get_left());
         recurtionDestroy(node->get_right());
+        if(node->get_data()!= nullptr)
+            delete node->get_data();
         delete node;
     }
 
