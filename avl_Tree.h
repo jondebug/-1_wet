@@ -599,12 +599,14 @@ public:
     void removeRoot(int key) {
 
         if ((root->get_right() == nullptr) && root->get_left() == nullptr) {
+            delete root->get_data();
             delete root;
             root=nullptr;//TODO is this ok?
             return;
         }
         if (root->get_right() == nullptr) {
             root = root->get_left();
+            delete root->get_father()->get_data();
             delete root->get_father();
 
             root->set_father(nullptr);
@@ -613,6 +615,7 @@ public:
         }
         if (root->get_left() == nullptr) {
             root = root->get_right();
+            delete root->get_father()->get_data();
             delete root->get_father();
 
             root->set_father(nullptr);
@@ -640,6 +643,7 @@ public:
             root->set_right(nullptr);
         else
             father->set_left(nullptr);
+        delete NextLargest->get_data();
         delete NextLargest;
         NextLargest= nullptr;
         father->set_height(std::max(get_height_addition(father->get_left()),
@@ -657,6 +661,7 @@ public:
             if (rightSon) {//Node is a right son
                 Father->set_right(NodeToRemove->get_left());
                 NodeToRemove->get_left()->set_father(Father);
+                delete NodeToRemove->get_data();
                 delete NodeToRemove;
                 NodeToRemove= nullptr;
                 Father->set_height(std::max(get_height_addition(Father->get_left
@@ -668,6 +673,7 @@ public:
                 Father->set_left(NodeToRemove->get_left());
 
                 NodeToRemove->get_left()->set_father(Father);
+                delete NodeToRemove->get_data();
                 delete NodeToRemove;
                 NodeToRemove= nullptr;
                 Father->set_height(std::max(get_height_addition(Father->get_left
@@ -685,6 +691,7 @@ public:
             if (rightSon) {//Node is a right son
                 Father->set_right(NodeToRemove->get_right());
                 NodeToRemove->get_right()->set_father(Father);
+                delete NodeToRemove->get_data();
                 delete NodeToRemove;
                 NodeToRemove= nullptr;
                 Father->set_height(std::max(get_height_addition(Father->get_left
@@ -694,6 +701,7 @@ public:
             } else {//Node is a left son
                 Father->set_left(NodeToRemove->get_right());
                 NodeToRemove->get_right()->set_father(Father);
+                delete NodeToRemove->get_data();
                 delete NodeToRemove;
                 NodeToRemove= nullptr;
                 Father->set_height(std::max(get_height_addition(Father->get_left
@@ -713,7 +721,7 @@ public:
         else{
             Father->set_left(nullptr);
         }
-
+        delete NodeToRemove->get_data();
         delete NodeToRemove;
         NodeToRemove= nullptr;
         Father->set_height(std::max(get_height_addition(Father->get_left

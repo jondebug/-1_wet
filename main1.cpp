@@ -82,8 +82,8 @@ static bool isInit = false;
 /***************************************************************************/
 
 int main(int argc, const char**argv) {
-    freopen("in1.txt","r",stdin);
-    freopen("out1.txt","w",stdout);
+    //freopen("in1.txt","r",stdin);
+    //freopen("out1.txt","w",stdout);
 
     char buffer[MAX_STRING_INPUT_SIZE];
 

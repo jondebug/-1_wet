@@ -66,8 +66,9 @@ StatusType MusicManager::RemoveArtistFromDB(int artistID) {
                 (songsArray->array[i]->get_key() != 0)) {
                 popularSongList.remove_node(songsArray->array[i]);
             }
-            allArtistsTree.removeByKey(artistID);
+
         }
+        allArtistsTree.removeByKey(artistID);
 
         return SUCCESS;
     }
