@@ -27,7 +27,7 @@ public:
 
 
     treeNode():left_son(nullptr), right_son(nullptr),father(nullptr),
-    height(0){};
+               height(0){};
 
 //    ~treeNode(){
 //        if (left_son != nullptr)
@@ -177,6 +177,7 @@ public:
         if ((node==nullptr)||(counter>m)) return;
         set_value_inOrder(node->get_left(),m,counter);
         int* data=new int;
+
         *data=counter;
         node->set_data(data);
 
@@ -191,6 +192,11 @@ public:
     }
 
 
+//    void add_treeNode(int d,S key){
+//        int *x=new int;
+//        *x=d;
+//        add_treeNode1(x,key);
+//    }
 
     void add_treeNode(T data,S key) {
 
@@ -325,6 +331,7 @@ public:
         if (node)
             return node->get_height();
         else return -1;
+
     }
 
 
@@ -335,6 +342,7 @@ public:
         if(node->get_data()!= nullptr)
             delete node->get_data();
         delete node;
+        int x=6;
     }
 
 //    void pointer_tree_destroy(treeNode<T,S>* node){
@@ -420,7 +428,7 @@ public:
     }
 
     template<typename P>
-   int printKmax(int &k, P p) {
+    int printKmax(int &k, P p) {
         int counter = 0;
         treeNode<T, S> *curr = largestNode;
         treeNode<T, S> *last = nullptr;
@@ -802,7 +810,7 @@ public:
 
     }
 
-    void print_in_order(treeNode<int,int>* t)
+    void print_in_order(treeNode<int*,int>* t)
     {
         if (t== nullptr)
             return;

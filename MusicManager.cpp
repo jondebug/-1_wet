@@ -16,6 +16,11 @@ StatusType MusicManager::AddDataCenter(int artistID, int numOfSongs) {
         if ((this == nullptr) || (numOfSongs <= 0) || artistID <= 0)
             return INVALID_INPUT;
 
+        if (this->allArtistsTree.searchKey(artistID,
+                                           allArtistsTree.getRoot()) !=
+            nullptr)
+            return FAILURE;
+
         array_len *new_array = new array_len;
 
         new_array->array=new listNode<avl_Tree<avl_Tree<int*,int>*,int>*>*[numOfSongs];
@@ -25,10 +30,7 @@ StatusType MusicManager::AddDataCenter(int artistID, int numOfSongs) {
 
         new_array->len = numOfSongs;
 
-        if (this->allArtistsTree.searchKey(artistID,
-                                           allArtistsTree.getRoot()) !=
-            nullptr)
-            return FAILURE;
+
 
         this->allArtistsTree.add_treeNode(new_array, artistID);
 
