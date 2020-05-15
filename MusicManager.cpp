@@ -82,27 +82,34 @@ StatusType MusicManager::RemoveArtistFromDB(int artistID) {
 
 StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
     try {
-        
-        
+
         if (allArtistsTree.searchKey(ArtistId,
                                      allArtistsTree.getRoot()) == nullptr)
             return FAILURE;
 
-        int *songIdInt=new int;
-        *songIdInt=songID;
-        
+
         array_len *arr = allArtistsTree.searchKey(ArtistId,
                                                   allArtistsTree.getRoot())
                 ->get_data();
+
+
         int numOfSongs = arr->len;
         if (numOfSongs <= songID) return INVALID_INPUT;
         //arr->array[songID]++;
+        int *songIdInt=new int;
+        *songIdInt=songID;
+
+
         avl_Tree<avl_Tree<int*,int> *, int> *artistTree = arr->array[songID]->get_data();
         avl_Tree<int*,int> *songTree = artistTree->searchKey(ArtistId,
                                                              artistTree->getRoot())->get_data();
         songTree->removeByKey(songID);
+        //bool flag=songTree->searchKey(songID,songTree->getRoot())==songTree->getRoot();
         if (songTree->getRoot() == nullptr) { //we removed this artist last song
+        //if (flag==true){
+         //   if (songTree!= nullptr) delete songTree;
             artistTree->removeByKey(ArtistId);
+
         }
         int numberOfplays = arr->array[songID]->get_key();
         int newPlays = numberOfplays + 1;
@@ -111,6 +118,7 @@ StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
 
         if (artistTree->getRoot() ==
             nullptr) { //we removed the last songs with this number of plays
+            //delete artistTree;
             popularSongList.remove_node(arr->array[songID]);
         }
 

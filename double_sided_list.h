@@ -194,7 +194,7 @@ public:
         else{ // this node is last in list
             last=node_to_remove->get_prev();
         }
-
+		delete node_to_remove->get_data();
         delete node_to_remove;
     }
 

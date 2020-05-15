@@ -48,6 +48,10 @@ public:
 public:
     //int* array;
     listNode<avl_Tree<avl_Tree<int*,int>*,int>*>** array;
+    void setLength(int numOfSongs){
+        this->array=new listNode<avl_Tree<avl_Tree<int*,int>*,int>*>*[numOfSongs];
+
+    }
     int len;
 
     ~array_len();

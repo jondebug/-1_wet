@@ -342,7 +342,7 @@ public:
         if(node->get_data()!= nullptr)
             delete node->get_data();
         delete node;
-        int x=6;
+        
     }
 
 //    void pointer_tree_destroy(treeNode<T,S>* node){
@@ -606,7 +606,7 @@ public:
 
     void removeRoot(int key) {
 
-        if ((root->get_right() == nullptr) && root->get_left() == nullptr) {
+        if ((root->get_right() == nullptr) && (root->get_left() == nullptr)) {
             delete root->get_data();
             delete root;
             root=nullptr;//TODO is this ok?
