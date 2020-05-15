@@ -29,22 +29,6 @@ public:
     treeNode():left_son(nullptr), right_son(nullptr),father(nullptr),
                height(0){};
 
-//    ~treeNode(){
-//        if (left_son != nullptr)
-//            left_son= nullptr;
-//        if (right_son != nullptr)
-//            right_son= nullptr;
-//        if (father != nullptr)
-//            father = nullptr;
-//        delete &key;
-//        delete &data;
-//        delete &height;
-//
-//    }
-
-//~treeNode(){
-////    delete &data;
-//}
 
     void set_data(T data){
         this->data=data;
@@ -79,17 +63,8 @@ public:
         key=temp.key;
 
     }
-//    ~treeNode<T,S>(){
-//        delete data;
-//        delete key;
-//        left_son= nullptr;
-//        right_son= nullptr;
-//        father= nullptr;
-//    }
 
     treeNode* get_left(){
-        //       if (this== nullptr)
-//            return nullptr;
         return left_son;
     }
 
@@ -181,8 +156,6 @@ public:
         *data=counter;
         node->set_data(data);
 
-//        node->set_data(counter);
-
         node->set_key(counter);
         counter++;
         set_value_inOrder(node->get_right(),m,counter);
@@ -192,16 +165,8 @@ public:
     }
 
 
-//    void add_treeNode(int d,S key){
-//        int *x=new int;
-//        *x=d;
-//        add_treeNode1(x,key);
-//    }
 
     void add_treeNode(T data,S key) {
-
-        //int left_counter = 0;
-
         if (this->root == nullptr) {
 
             treeNode<T,S> *new_node = new treeNode<T,S>(data,key);
@@ -211,8 +176,6 @@ public:
         } else
             recurtionAdd(root,data,key);
 
-
-        //treeNode<T,S>* largest=new treeNode<T,S>(0,0); //TODO mabye need to change to new treeNode
 
         largestNode=findRightMost(root);
         smallestNode=findLeftMost(root);
@@ -226,8 +189,6 @@ public:
 
     void repairBF(treeNode<T,S> *new_node) {
         treeNode<T, S> *current = new_node;
-        //new_node->set_height(std::max(get_height_addition(new_node->get_left
-        //()),get_height_addition(new_node->get_right())) +1);
         int bf;
 
         while (current!= nullptr) {
@@ -345,14 +306,6 @@ public:
         
     }
 
-//    void pointer_tree_destroy(treeNode<T,S>* node){
-//    //delete of non int tree
-//        if (!node) return;
-//        recurtionDestroy(node->get_left());
-//        recurtionDestroy(node->get_right());
-//        delete node->get_data();
-//        delete node;
-//    }
 
 
     ~avl_Tree(){
@@ -433,7 +386,6 @@ public:
         treeNode<T, S> *curr = largestNode;
         treeNode<T, S> *last = nullptr;
 
-        // while (k>0&&(curr!= nullptr)) {
         while ((counter < k) && (curr != nullptr)) {
 
             if (curr->get_right() == last) { //we finished with right sub tree
@@ -458,63 +410,8 @@ public:
         return counter;
     }
 
-//    int printKmax(int k){ // OLD working VERSTION - not generic
-//        int counter = 0;
-//        treeNode<T, S> *curr=largestNode;
-//        treeNode<T, S> *last = nullptr;
-//
-//        while ((counter < k)&&(curr!= nullptr)) {
-//            if (curr->get_right() == last) { //we finished with right sub tree
-//                std::cout << curr->get_data(); //print root of subtree
-//                std::cout << ",";
-//                counter++;
-//
-//                if (curr->get_left()!= nullptr) { //we finished with right sub tree -> go to left sub tree
-//                    curr = findRightMost(curr->get_left());
-//                    last=curr->get_right();
-//                }
-//                else { //we finished with both left and right sub tree, and there is no left sub tree
-//                    last = curr;
-//                    curr = curr->get_father();
-//                }
-//
-//            } else if (last->get_father() == curr) { //finished with both left and right sub trees
-//                last = curr;
-//                curr = last->get_father();
-//            }
-//        }
-//        return counter;
-//    }
 
 
-
-//    int printKmin(int k){ // OLD VERSTION
-//        int counter = 0;
-//        treeNode<T, S> *curr=smallestNode;
-//        treeNode<T, S> *last = nullptr;
-//
-//        while ((counter < k)&&(curr!= nullptr)) {
-//            if (curr->get_left() == last) { //we finished with left sub tree
-//                std::cout << curr->get_data(); //print root of subtree
-//                std::cout << ",";
-//                counter++;
-//
-//                if (curr->get_right()!= nullptr) { //we finished with left sub tree -> go to right sub tree
-//                    curr = findLeftMost(curr->get_right());
-//                    last=curr->get_left();
-//                }
-//                else { //we finished with both left and right sub tree, and there is no left sub tree
-//                    last = curr;
-//                    curr = curr->get_father();
-//                }
-//
-//            } else if (last->get_father() == curr) { //finished with both left and right sub trees
-//                last = curr;
-//                curr = last->get_father();
-//            }
-//        }
-//        return counter;
-//    }
 
     template<typename P>
     int printKmin(int num,int &k,int *arr1,int *arr2,int id, P p) {
@@ -548,45 +445,14 @@ public:
     }
 
 
-//    template<typename P> //working version
-//    int printKmin(int &k, P p) {
-//                int counter = 0;
-//        treeNode<T, S> *curr=smallestNode;
-//        treeNode<T, S> *last = nullptr;
-//
-//
-//        while ((counter < k)&&(curr!= nullptr)) {
-//            if (curr->get_left() == last) { //we finished with left sub tree
-//                p(k, curr);
-//                counter++;
-//
-//                if (curr->get_right()!= nullptr) { //we finished with left sub tree -> go to right sub tree
-//                    curr = findLeftMost(curr->get_right());
-//                    last=curr->get_left();
-//                }
-//                else { //we finished with both left and right sub tree, and there is no left sub tree
-//                    last = curr;
-//                    curr = curr->get_father();
-//                }
-//
-//            } else if (last->get_father() == curr) { //finished with both left and right sub trees
-//                last = curr;
-//                curr = last->get_father();
-//            }
-//        }
-//        return k; //k is the number of items need to be printed
-//
-//    }
 
     treeNode<T,S>* findRightMost(treeNode<T,S>* node){
-        //treeNode<T, S> *rightest = root->get_left();
 
         while(node->get_right()!= nullptr)
             node=node->get_right();
         return node;
     }
     treeNode<T,S>* findLeftMost(treeNode<T,S>* node){
-        //treeNode<T, S> *rightest = root->get_left();
         while(node->get_left()!= nullptr)
             node=node->get_left();
         return node;
@@ -772,8 +638,6 @@ public:
 
         {
             removeLeaf(NodeToRemove,rightSon,Father);
-//            largestNode=findRightMost(root);
-//            smallestNode=findLeftMost(root);
             return;
 
         }
@@ -805,9 +669,6 @@ public:
         largestNode=findRightMost(root);
         smallestNode=findLeftMost(root);
 
-
-
-
     }
 
     void print_in_order(treeNode<int*,int>* t)
@@ -821,7 +682,6 @@ public:
         cout<<t->get_data()<<"  bf:  "<<bf<<"  height:  "<<t->get_height()
             <<"\n";
         print_in_order(t->get_right());
-
     }
 
     void printTree()
@@ -830,10 +690,7 @@ public:
             return;
         print_in_order(root);
         cout<<"-----------------\n";
-
     }
-
-
 
 
 };

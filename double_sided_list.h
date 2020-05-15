@@ -20,14 +20,10 @@ class listNode {
 
 public:
 
-//
-//    listNode(T data, listNode *prev = nullptr, listNode *next = nullptr) :
-//            data(data), next(next), prev(prev) {
-    //    }
+
     void set_key(int key){
         this->key=key;
     }
-
 
     int get_key(){
         return key;
@@ -176,7 +172,6 @@ public:
             T data = it->get_data();
             cout<<data<<"\n";
             it=it->get_next();
-
         }
 
     }
@@ -201,9 +196,6 @@ public:
     listNode<T>* add_node_after(listNode<T> * node_to_add_after, T data, int
     key){
 
-//        if(node_to_add_after== nullptr){
-//            listNode<T>* temp=first;
-//        }
 
         listNode<T>* new_node=new listNode<T>;
 
@@ -217,10 +209,6 @@ public:
         node_to_add_after->set_next(new_node);
         //all data for next node:
 
-//        if(node_to_add_after->get_next()!= nullptr)
-//            node_to_add_after->get_next()->set_prev(new_node);
-
-        //need to be changed to:
         if(new_node->get_next()!= nullptr)
             new_node->get_next()->set_prev(new_node);
 
@@ -235,7 +223,6 @@ public:
             it=temp->get_next();
             if (temp->get_data()!= nullptr)
                 delete temp->get_data();
-                //temp->get_data()->pointer_tree_destroy();
             delete temp;
             temp=it;
         }

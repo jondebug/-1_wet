@@ -10,24 +10,15 @@
 #include "library1.h"
 
 
-//typedef enum {
-//    SUCCESS = 0,
-//    FAILURE = -1,
-//    ALLOCATION_ERROR = -2,
-//    INVALID_INPUT = -3
-//} StatusType;
-
-//functors:
+//function objects, used by recommended songs function:
 
 class Print{
 public:
     void operator()(int numOfsongs,int &k, treeNode<int*,int>* song_node,int* artists,int* songs,int artistID) {
 
-        //cout<<song_node->get_data()<<",\n";
         songs[numOfsongs-k]=*song_node->get_data();
         artists[numOfsongs-k]=artistID;
         k--;
-
 
     }
 };
@@ -39,14 +30,14 @@ public:
 
         artist_node->get_data()->printKmin(numOfsongs, k, artists, songs,
                                            artist_node->get_key(), p);
-        //
+
     }
 };
 
 
-    class array_len{
+class array_len{
 public:
-    //int* array;
+
     listNode<avl_Tree<avl_Tree<int*,int>*,int>*>** array;
     void setLength(int numOfSongs){
         this->array=new listNode<avl_Tree<avl_Tree<int*,int>*,int>*>*[numOfSongs];
@@ -56,10 +47,7 @@ public:
 
     ~array_len();
 
-
-    };
-
-
+};
 
 
 
@@ -79,13 +67,11 @@ public:
         return popularSongList;
     }
 
-    StatusType AddDataCenter(int artistID,int numOfSongs); // add artist function
+    StatusType AddDataCenter(int artistID,int numOfSongs);
     StatusType AddToSongCountDB(int ArtistId,int songID);
     void QuitDB();
     StatusType NumberOfStreamsDB(int artistID, int songID, int *streams);
     StatusType GetRecommendedSongsDB(int numOfSongs, int *artists, int *songs);
-
-   // ~MusicManager();
 
 };
 
