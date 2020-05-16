@@ -55,7 +55,7 @@ StatusType AddToSongCount(void *DS, int artistID, int songID){
 ///artistID must exist already.
 /// songID must be a song of artistID
 StatusType NumberOfStreams(void *DS, int artistID, int songID, int *streams) {
-    if ((!DS) || (songID < 0) || (artistID < 0)) {
+    if ((!DS) || (songID < 0) || (artistID <= 0)) {
         return INVALID_INPUT;
     }
     StatusType res=((MusicManager *) DS)->NumberOfStreamsDB(artistID,songID,

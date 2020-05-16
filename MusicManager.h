@@ -57,6 +57,7 @@ class MusicManager{
 
     avl_Tree<array_len*,int> allArtistsTree;
 
+    int total_songs = 0 ;
 public:
 
     MusicManager ();

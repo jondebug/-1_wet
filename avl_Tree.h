@@ -354,12 +354,6 @@ public:
         recursionDestroy(root);
     }
 
-//    void treeClear(){
-//        recursionDestroy(root);
-//        root= nullptr;
-//
-//    }
-
     ///replace node with right son, move node to the left
     void leftRotation(treeNode<T,S>* node){
 
@@ -424,35 +418,6 @@ public:
         left->set_height(std::max(get_height_addition(left->get_left()),get_height_addition(left->get_right()))+1);
     }
 
-//    template<typename P>
-//    int printKmax(int &k, P p) {
-//        int counter = 0;
-//        treeNode<T, S> *curr = largestNode;
-//        treeNode<T, S> *last = nullptr;
-//
-//        while ((counter < k) && (curr != nullptr)) {
-//
-//            if (curr->get_right() == last) { //we finished with right sub tree
-//                p(k, curr);
-//                counter++;
-//
-//                if (curr->get_left() !=nullptr) { //we finished with right sub tree -> go to left sub tree
-//                    curr = findRightMost(curr->get_left());
-//                    last = curr->get_right();
-//                } else { //we finished with both left and right sub tree, and there is no left sub tree
-//                    last = curr;
-//                    curr = curr->get_father();
-//                }
-//
-//            } else if (last->get_father() ==
-//                       curr) { //finished with both left and right sub trees
-//                last = curr;
-//                curr = last->get_father();
-//            }
-//        }
-//
-//        return counter;
-//    }
 
 
 
@@ -486,8 +451,10 @@ public:
                 last = curr;
                 curr = last->get_father();
             }
+
         }
-        return k; //k is the number of items need to be printed after this function
+        return k;
+            //k is the number of items need to be printed after this function
 
     }
 

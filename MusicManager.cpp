@@ -31,7 +31,7 @@ StatusType MusicManager::AddDataCenter(int artistID, int numOfSongs) {
             new_array->array[i]=popularSongList.get_first();
         }
         new_array->len = numOfSongs;
-
+        total_songs+=numOfSongs;
 
         //add this artist treenode to allArtist tree
         this->allArtistsTree.add_treeNode(new_array, artistID);
@@ -62,6 +62,9 @@ StatusType MusicManager::RemoveArtistFromDB(int artistID) {
         array_len *songsArray = allArtistsTree.searchKey(artistID,
                                                          allArtistsTree
                                                                  .getRoot())->get_data();
+
+        total_songs=total_songs-songsArray->len;
+
         // remove all nodes in artist trees that this artist has
         for (int i = 0; i < songsArray->len; i++) {
             songsArray->array[i]->get_data()->removeByKey(artistID);
@@ -209,6 +212,10 @@ StatusType MusicManager::NumberOfStreamsDB(int artistID, int songID, int *stream
 StatusType MusicManager::GetRecommendedSongsDB(int numOfSongs, int *artists,
                                                int *songs) {
     //if there are less songs than numOfSongs -> return FALIURE:
+
+    if (total_songs<numOfSongs)
+        return FAILURE;
+
     print_song_tree p;
     listNode<avl_Tree<avl_Tree<int*,int>*,int>*>* iterator=popularSongList
             .get_last();
