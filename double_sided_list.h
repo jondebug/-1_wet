@@ -20,7 +20,7 @@ class listNode {
 
 public:
 
-
+    ///set key of this node
     void set_key(int key){
         this->key=key;
     }

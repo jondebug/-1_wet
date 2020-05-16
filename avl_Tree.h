@@ -55,6 +55,8 @@ public:
     void set_height(const int HEIGHT){
         this->height=HEIGHT;
     }
+
+    ///swap the data and key of two nodes
     void swapNodes(treeNode* to_swap) {
         treeNode temp(*to_swap);
 
