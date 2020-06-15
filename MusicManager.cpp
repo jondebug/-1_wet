@@ -67,7 +67,9 @@ StatusType MusicManager::RemoveArtistFromDB(int artistID) {
 
         // remove all nodes in artist trees that this artist has
         for (int i = 0; i < songsArray->len; i++) {
-            songsArray->array[i]->get_data()->removeByKey(artistID);
+            songsArray->array[i]->get_data()->searchKey(artistID,
+                    songsArray->array[i]->get_data()->getRoot())->get_data()
+                    ->removeByKey(i);
 
         // remove list nodes, if they point to trees with no songs
             if ((songsArray->array[i]->get_data()->getRoot() == nullptr) &&
@@ -88,6 +90,7 @@ StatusType MusicManager::RemoveArtistFromDB(int artistID) {
 
 
 StatusType MusicManager:: AddToSongCountDB(int ArtistId,int songID){
+
     try {
         //check valid input:
         if (allArtistsTree.searchKey(ArtistId,
